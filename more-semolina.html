@@ -1,0 +1,1463 @@
+<meta charset="utf-8">
+<title>More Semolina</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Karla:wght@400;600;700&family=Shrikhand&display=swap">
+<style>
+/* Layout: a pizza box lid. One ink on kraft card, an order ticket pinned beside a 3D back garden. */
+:root {
+  --kraft: #cfa974;
+  --kraft-deep: #bd9560;
+  --ink: #152a6e;
+  --ink-soft: #2a3f86;
+  --ticket: #fbf6e6;
+  --ticket-ink: #23211c;
+  --ticket-rule: #cfc6ab;
+  --sauce: #b92a18;
+  --gold: #d9a521;
+  --good: #1d5a2c;
+  --night: #141d3f;
+  --display: "Shrikhand", "Georgia", serif;
+  --body: "Karla", "Helvetica Neue", Arial, sans-serif;
+  --mono: "Courier Prime", "Courier New", monospace;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { min-height: 100%; }
+body {
+  margin: 0;
+  background-color: var(--kraft);
+  background-image: repeating-linear-gradient(90deg, transparent 0 5px, rgba(90, 58, 20, .055) 5px 7px);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 16px;
+  line-height: 1.45;
+  padding-block: 20px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.shop {
+  max-width: 1120px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(280px, 340px) minmax(0, 1fr);
+  grid-template-rows: auto auto 1fr;
+  grid-template-areas: "mast stage" "ticket stage" "dock stage";
+  gap: 16px 28px;
+  align-items: start;
+}
+.mast { grid-area: mast; min-width: 0; }
+.mast-top { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.mast p { margin: 0; font-weight: 700; font-size: 13px; letter-spacing: .09em; text-transform: uppercase; }
+h1 {
+  margin: 6px 0 0;
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(44px, 5.4vw, 58px);
+  line-height: .95;
+  transform: rotate(-2deg);
+  transform-origin: left bottom;
+  text-shadow: 3px 3px 0 var(--kraft-deep);
+}
+.sound {
+  flex: none;
+  background: none;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  color: var(--ink);
+  font: 700 13px var(--body);
+  padding: 4px 11px;
+  cursor: pointer;
+}
+.ticket {
+  grid-area: ticket;
+  background: var(--ticket);
+  color: var(--ticket-ink);
+  font-family: var(--mono);
+  padding: 14px 16px 26px;
+  display: grid;
+  gap: 10px;
+  -webkit-mask: conic-gradient(from -45deg at bottom, transparent, #000 1deg 89deg, transparent 90deg) 50% / 16px 100%;
+  mask: conic-gradient(from -45deg at bottom, transparent, #000 1deg 89deg, transparent 90deg) 50% / 16px 100%;
+}
+.t-head { display: flex; justify-content: space-between; gap: 12px; font-size: 14px; border-bottom: 1px dashed var(--ticket-rule); padding-bottom: 6px; }
+.ticket h2 { margin: 0; font-family: var(--mono); font-weight: 700; font-size: 23px; line-height: 1.1; text-transform: uppercase; text-wrap: balance; }
+.note { margin: 0; font-size: 14px; line-height: 1.3; }
+.specs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 0; }
+.specs div { min-width: 0; }
+.specs dt { font-size: 12px; }
+.specs dd { margin: 0; font-weight: 700; font-size: 17px; font-variant-numeric: tabular-nums; }
+.meters { display: grid; gap: 8px; }
+.meter { display: grid; grid-template-columns: 1fr auto; gap: 2px 8px; font-size: 14px; }
+.meter b { font-variant-numeric: tabular-nums; }
+.bar { grid-column: 1 / -1; height: 10px; border: 1.5px solid var(--ticket-ink); background: #fff; }
+.bar i { display: block; height: 100%; width: 0; background: var(--gold); }
+.meter.over b { color: var(--sauce); }
+.meter.over .bar i { background: var(--sauce); }
+.tally { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; font-size: 14px; }
+.tally li { display: flex; justify-content: space-between; gap: 12px; }
+.tally li span:last-child { font-weight: 700; font-variant-numeric: tabular-nums; flex: none; }
+
+.dock { grid-area: dock; min-width: 0; }
+.view { display: grid; gap: 12px; }
+.view p { margin: 0; }
+label { font-weight: 700; display: grid; gap: 4px; }
+input[type="text"] {
+  width: 100%;
+  font: 600 17px var(--body);
+  color: var(--ticket-ink);
+  background: var(--ticket);
+  border: 2px solid var(--ink);
+  border-radius: 0;
+  padding: 9px 10px;
+}
+.go {
+  width: 100%;
+  background: var(--ink);
+  color: var(--ticket);
+  border: 0;
+  border-radius: 0;
+  box-shadow: 4px 4px 0 var(--kraft-deep);
+  font-family: var(--display);
+  font-size: 25px;
+  line-height: 1.1;
+  padding: 12px 14px 13px;
+  cursor: pointer;
+  transition: transform .08s, box-shadow .08s;
+}
+.go:hover { background: var(--ink-soft); }
+.go:active { transform: translate(3px, 3px); box-shadow: 1px 1px 0 var(--kraft-deep); }
+.go:disabled { opacity: .55; cursor: default; }
+.plain {
+  width: 100%;
+  background: none;
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  border-radius: 0;
+  font: 700 16px var(--body);
+  padding: 9px 12px;
+  cursor: pointer;
+}
+.steps { margin: 0; padding-left: 20px; display: grid; gap: 4px; }
+.throw-title { font-family: var(--display); font-size: 30px; line-height: 1; }
+.verdict {
+  font-family: var(--display);
+  font-size: clamp(32px, 4vw, 40px);
+  line-height: 1;
+  transform: rotate(-1.5deg);
+  transform-origin: left center;
+  text-wrap: balance;
+}
+.verdict.bad { color: var(--sauce); }
+.verdict.good { color: var(--good); }
+.stats { display: flex; flex-wrap: wrap; gap: 4px 18px; font-family: var(--mono); font-size: 15px; font-weight: 700; }
+#shareText { font-family: var(--mono); font-size: 14px; background: var(--ticket); color: var(--ticket-ink); padding: 8px 10px; user-select: all; }
+button:focus-visible, input:focus-visible, canvas:focus-visible { outline: 3px solid var(--sauce); outline-offset: 2px; }
+
+.stage { grid-area: stage; min-width: 0; position: sticky; top: 20px; display: flex; justify-content: center; }
+.frame {
+  position: relative;
+  width: min(100%, calc((100dvh - 40px) * 720 / 760));
+  aspect-ratio: 720 / 760;
+  border: 4px solid var(--ink);
+  background: var(--night);
+  overflow: hidden;
+}
+canvas#c { display: block; width: 100%; height: 100%; cursor: crosshair; touch-action: none; }
+.hud { position: absolute; pointer-events: none; color: #fff7df; font-family: var(--mono); font-weight: 700; }
+.wind { top: 10px; left: 10px; background: rgba(12, 18, 46, .78); padding: 5px 10px; font-size: 15px; display: flex; gap: 8px; align-items: baseline; }
+.wind span { font-size: 20px; line-height: 1; }
+.gauge { right: 12px; top: 14%; bottom: 14%; width: 62px; display: grid; grid-template-rows: auto 1fr auto; justify-items: center; gap: 5px; font-size: 12px; text-align: center; text-shadow: 0 1px 2px #000; }
+.track { position: relative; width: 26px; height: 100%; background: rgba(12, 18, 46, .82); border: 2px solid #fff7df; }
+.band { position: absolute; left: 0; right: 0; background: #57c26b; }
+.needle { position: absolute; left: -7px; right: -7px; height: 5px; margin-bottom: -2px; background: #ffd23f; box-shadow: 0 0 0 1.5px #152a6e; }
+.callout {
+  left: 0; right: 0; top: 24%;
+  text-align: center;
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(48px, 10vw, 84px);
+  line-height: 1;
+  color: #ffd23f;
+  -webkit-text-stroke: 3px var(--ink);
+  paint-order: stroke fill;
+  transform: rotate(-5deg);
+}
+.nogl { position: absolute; inset: 0; display: grid; place-items: center; padding: 24px; text-align: center; color: #fff7df; font-size: 17px; }
+
+@media (max-width: 780px) {
+  body { padding-block: 12px; }
+  .shop { grid-template-columns: minmax(0, 1fr); grid-template-rows: none; grid-template-areas: "mast" "ticket" "stage" "dock"; gap: 12px; }
+  h1 { font-size: 38px; margin-top: 12px; }
+  .stage { position: static; }
+  .frame { width: 100%; }
+  .ticket { gap: 7px; padding: 10px 12px 22px; }
+  .ticket h2 { font-size: 19px; }
+  .note { display: none; }
+  .specs dd { font-size: 15px; }
+  .gauge { width: 54px; right: 6px; }
+}
+@media (prefers-reduced-motion: reduce) { .go { transition: none; } }
+</style>
+
+<main class="shop">
+  <header class="mast">
+    <div class="mast-top">
+      <p>Pizza launch simulator</p>
+      <button class="sound" id="soundBtn" type="button" aria-pressed="true">Sound on</button>
+    </div>
+    <h1>More Semolina</h1>
+  </header>
+
+  <section class="ticket" aria-label="Order ticket">
+    <div class="t-head"><span id="tOrder">Order 1 of 5</span><span id="tScore">0 pts</span></div>
+    <h2 id="tName">Margherita</h2>
+    <p class="note" id="tNote"></p>
+    <dl class="specs" id="tSpecs">
+      <div><dt>Size</dt><dd id="sSize"></dd></div>
+      <div><dt>Hydration</dt><dd id="sHyd"></dd></div>
+      <div><dt>Max semolina</dt><dd id="sMax"></dd></div>
+    </dl>
+    <div class="meters" id="tMeters">
+      <div class="meter" id="gMeter"><span>On the scale</span><b id="gVal">0.0 g</b><div class="bar"><i id="gBar"></i></div></div>
+      <div class="meter" id="tMeter"><span id="tLabel">Dough lands in</span><b id="tVal">0 s</b><div class="bar"><i id="tBar"></i></div></div>
+    </div>
+    <ol class="tally" id="tTally" hidden></ol>
+  </section>
+
+  <section class="dock" id="dock" aria-live="polite">
+    <div class="view" id="vStart">
+      <ol class="steps">
+        <li>Shake semolina over the circle until it turns gold.</li>
+        <li>Drag back to load the throw and steer it at the oven door.</li>
+        <li>Let go in the green zone. Allow for the wind.</li>
+      </ol>
+      <label for="chef">Who's on the peel tonight?
+        <input id="chef" type="text" maxlength="24" placeholder="Your friend's name" autocomplete="off">
+      </label>
+      <button class="go" id="startBtn" type="button">Light the oven</button>
+    </div>
+    <div class="view" id="vDust" hidden>
+      <p id="dustHint">The clock starts with your first shake.</p>
+      <button class="go" id="loadBtn" type="button">Load the pizza</button>
+    </div>
+    <div class="view" id="vThrow" hidden>
+      <div class="throw-title">Now throw it</div>
+      <p id="throwHint">Drag down to pull the peel back, steer left or right, and let go in the green zone.</p>
+    </div>
+    <div class="view" id="vResult" hidden>
+      <div class="verdict" id="rTitle"></div>
+      <p id="rLine"></p>
+      <div class="stats"><span id="rStick"></span><span id="rGrams"></span><span id="rThrow"></span><span id="rPts"></span></div>
+      <button class="go" id="nextBtn" type="button">Next pizza</button>
+    </div>
+    <div class="view" id="vFinal" hidden>
+      <div class="verdict" id="fScore"></div>
+      <p id="fLine"></p>
+      <button class="go" id="againBtn" type="button">Another shift</button>
+      <button class="plain" id="copyBtn" type="button">Copy my score</button>
+      <p id="shareText" hidden></p>
+    </div>
+  </section>
+
+  <section class="stage">
+    <div class="frame" id="frame">
+      <canvas id="c" tabindex="0" aria-label="Back garden with a pizza peel and an outdoor oven. Hold the pointer down to shake semolina. To throw, drag down and let go, or use the arrow keys to steer and hold the space bar for power."></canvas>
+      <div class="hud wind" id="wind" hidden>Wind <span id="windArrow"></span><b id="windVal"></b></div>
+      <div class="hud gauge" id="gauge" hidden>
+        <div>Too hard</div>
+        <div class="track"><div class="band" id="gBand"></div><div class="needle" id="gNeedle"></div></div>
+        <div>Too soft</div>
+      </div>
+      <div class="hud callout" id="callout" hidden></div>
+      <div class="nogl" id="nogl" hidden>This game needs 3D graphics, which this browser has switched off. Try another browser or device.</div>
+    </div>
+  </section>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
+  const lerp = (a, b, t) => a + (b - a) * t;
+  const easeIn = t => t * t * t;
+  const easeOut = t => 1 - Math.pow(1 - t, 3);
+  const gauss = () => (Math.random() + Math.random() + Math.random() + Math.random() - 2) / 0.58;
+  const pick = list => list[Math.floor(Math.random() * list.length)];
+  function seeded(seed) {
+    return () => {
+      seed |= 0; seed = seed + 0x6D2B79F5 | 0;
+      let t = Math.imul(seed ^ seed >>> 15, 1 | seed);
+      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+      return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
+  }
+
+  /* ---------- Rules ---------- */
+  const W = 640, H = 700, CELL = 12, COLS = Math.ceil(W / CELL), ROWS = Math.ceil(H / CELL);
+  const GRAIN_G = 0.02, POUR_RATE = 110, SPREAD = 26;
+  const WORLD_PER_INCH = 0.27, DOOR_INCHES = 5 / WORLD_PER_INCH, SOAK_GRACE = 5;
+
+  const ROUNDS = [
+    { name: 'Margherita', inch: 10, hyd: 60, need: 1.0, slack: 1.9, tf: 2.6, dx: 0, dy: 0, tops: 'basil', wind: 0, band: .14, wobble: .015, note: 'No wind tonight. Cover the circle, then land it on the stone.' },
+    { name: 'Marinara', inch: 12, hyd: 65, need: 1.2, slack: 1.8, tf: 2.3, dx: -16, dy: 10, tops: 'garlic', wind: 8, band: .12, wobble: .02, note: 'A light breeze. Watch the chimney smoke and aim into it.' },
+    { name: 'Diavola', inch: 12, hyd: 70, need: 1.5, slack: 1.65, tf: 2.0, dx: 20, dy: -12, tops: 'pepperoni', wind: 13, band: .10, wobble: .03, note: 'Wetter dough, and the wind is picking up.' },
+    { name: 'Quattro Formaggi', inch: 14, hyd: 74, need: 1.7, slack: 1.55, tf: 1.8, dx: -20, dy: 8, tops: 'cheese', wind: 18, band: .09, wobble: .04, note: 'Fourteen inches. Not much room at the door.' },
+    { name: 'Friday Night Special', inch: 14, hyd: 82, need: 2.1, slack: 1.45, tf: 1.6, dx: 22, dy: -14, tops: 'everything', wind: 24, band: .075, wobble: .05, note: '82% hydration in a gale. Nobody will say who approved this.' }
+  ];
+
+  const VERDICTS = {
+    glide: { title: 'Clean launch', tone: 'good', lines: ['Off the peel and dead centre on the stone. {n} is insufferable about this already.', 'It slid like it had somewhere better to be.', 'Perfect. {n} will now explain the technique to everyone in the garden.'] },
+    snag: { title: 'Bit of a snag', tone: '', lines: ['It got there, and it is now roughly the shape of Portugal. More semolina.', 'One edge held on for dear life. The pizza is an oval now. More semolina.', '{n} calls this shape rustic. More semolina.'] },
+    calzone: { title: 'Calzone', tone: 'bad', lines: ['The order said {p}. The oven says calzone. More semolina.', 'It folded in half on the way in. {n} will claim this was the plan. More semolina.'] },
+    stuck: { title: 'Welded to the peel', tone: 'bad', lines: ['The toppings went into the oven. The dough stayed with you. More semolina.', 'That dough is part of the peel now. {n} owns a very heavy flatbread. More semolina.'] },
+    beach: { title: 'Semolina beach', tone: 'bad', lines: ['Lovely throw, then the loose semolina burned and the smoke went over the fence. The neighbours have opinions.', 'The stone is a beach and next door have closed their windows. Too much, which {n} had thought was impossible.'] },
+    door: { title: 'Door strike', tone: 'bad', lines: ['It met the oven door at speed. The door won. Mind the wind next time.', '{n} is now scraping mozzarella off stainless steel. Aim for the hole.'] },
+    short: { title: 'Left on the lip', tone: 'bad', lines: ['Half in, half out, and drooping slowly towards the table. That throw needed more conviction.', 'It stopped at the door like it forgot why it came in. Throw harder.'] },
+    long: { title: 'Back wall barbecue', tone: 'bad', lines: ['Straight across the stone and into the flames. {n} has invented charcoal.', 'Too much welly. The pizza is now part of the burner. Throw softer.'] }
+  };
+  const CALLOUTS = { door: 'CLANG!', long: 'FWOOSH!', beach: 'OI!', stuck: 'NOPE', short: 'DROOP' };
+
+  const RANKS = [
+    [450, 'Semolina Sommelier', 'Every grain accounted for. {n} may now correct strangers about pizza.'],
+    [350, 'Peel Whisperer', 'Mostly round, mostly in the oven. {n} can be trusted with guests.'],
+    [220, 'Calzone Apologist', '{n} keeps saying the folded ones were intentional. More semolina.'],
+    [0, 'Professional Stone Scraper', 'The oven needs a chisel and {n} needs more semolina.']
+  ];
+
+  if (!window.THREE) { $('nogl').hidden = false; $('startBtn').disabled = true; return; }
+  const canvas = $('c');
+  let renderer;
+  try { renderer = new THREE.WebGLRenderer({ canvas, antialias: true }); }
+  catch (err) { $('nogl').hidden = false; $('startBtn').disabled = true; return; }
+
+  /* ---------- Renderer and scene ---------- */
+  renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
+  renderer.outputEncoding = THREE.sRGBEncoding;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.05;
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(40, 720 / 760, .1, 120);
+  const V = (x, y, z) => new THREE.Vector3(x, y, z);
+
+  function canvasTexture(w, h, paint, repeat) {
+    const el = document.createElement('canvas');
+    el.width = w; el.height = h;
+    paint(el.getContext('2d'), w, h);
+    const tex = new THREE.CanvasTexture(el);
+    tex.encoding = THREE.sRGBEncoding;
+    tex.anisotropy = 4;
+    if (repeat) { tex.wrapS = tex.wrapT = THREE.RepeatWrapping; tex.repeat.set(repeat[0], repeat[1]); }
+    return tex;
+  }
+  const skyPaint = (g, w, h) => {
+    const sky = g.createLinearGradient(0, 0, 0, h);
+    sky.addColorStop(0, '#141d4a'); sky.addColorStop(.45, '#3c3a78'); sky.addColorStop(.72, '#b4587a'); sky.addColorStop(.9, '#f0a060'); sky.addColorStop(1, '#f6c27a');
+    g.fillStyle = sky; g.fillRect(0, 0, w, h);
+  };
+  scene.background = canvasTexture(16, 256, skyPaint);
+  scene.fog = new THREE.Fog(0x4a3a68, 24, 62);
+
+  (function environment() {
+    const envScene = new THREE.Scene();
+    const dome = new THREE.Mesh(new THREE.SphereGeometry(40, 24, 16), new THREE.MeshBasicMaterial({ map: canvasTexture(16, 256, skyPaint), side: THREE.BackSide }));
+    envScene.add(dome);
+    const glow = new THREE.Mesh(new THREE.BoxGeometry(30, 6, 2), new THREE.MeshBasicMaterial({ color: 0xffd9a0 }));
+    glow.position.set(-10, 16, 22); envScene.add(glow);
+    const floor = new THREE.Mesh(new THREE.BoxGeometry(80, 1, 80), new THREE.MeshBasicMaterial({ color: 0x2a2018 }));
+    floor.position.y = -12; envScene.add(floor);
+    const pmrem = new THREE.PMREMGenerator(renderer);
+    scene.environment = pmrem.fromScene(envScene, .03).texture;
+    pmrem.dispose();
+  })();
+
+  scene.add(new THREE.HemisphereLight(0x9fb2e6, 0x3a2a1c, .45));
+  const sun = new THREE.DirectionalLight(0xffdcb0, 1.5);
+  sun.position.set(-8, 16, 9);
+  sun.target.position.set(0, 0, -3);
+  sun.castShadow = true;
+  sun.shadow.mapSize.set(1536, 1536);
+  Object.assign(sun.shadow.camera, { left: -13, right: 13, top: 14, bottom: -14, near: 1, far: 44 });
+  sun.shadow.bias = -.0006;
+  scene.add(sun, sun.target);
+  const ovenLight = new THREE.PointLight(0xff6a1e, 1.4, 13, 2);
+  ovenLight.position.set(0, 2, -4.2);
+  scene.add(ovenLight);
+
+  function shadowed(mesh, cast = true, receive = true) { mesh.castShadow = cast; mesh.receiveShadow = receive; return mesh; }
+
+  /* ---------- Garden ---------- */
+  const STONE_Y = 1.3;
+  (function garden() {
+    const planks = canvasTexture(512, 512, (g, w, h) => {
+      const rnd = seeded(5);
+      for (let i = 0; i < 6; i++) {
+        const x = i * w / 6;
+        g.fillStyle = ['#7a5230', '#6f4a2b', '#84593a', '#744d2d'][i % 4]; g.fillRect(x, 0, w / 6, h);
+        for (let n = 0; n < 34; n++) {
+          g.strokeStyle = rnd() > .5 ? 'rgba(40,22,10,.2)' : 'rgba(190,140,90,.13)';
+          g.lineWidth = .6 + rnd() * 1.6;
+          const lx = x + rnd() * w / 6;
+          g.beginPath(); g.moveTo(lx, 0); g.bezierCurveTo(lx + rnd() * 8 - 4, h * .3, lx + rnd() * 8 - 4, h * .7, lx, h); g.stroke();
+        }
+        g.fillStyle = 'rgba(16,8,4,.75)'; g.fillRect(x, 0, 4, h);
+      }
+    }, [1.6, 2.4]);
+    const table = shadowed(new THREE.Mesh(new THREE.BoxGeometry(17, .5, 28), new THREE.MeshStandardMaterial({ map: planks, roughness: .8 })), false);
+    table.position.set(0, -.25, -1);
+    scene.add(table);
+    const lawn = new THREE.Mesh(new THREE.PlaneGeometry(120, 120), new THREE.MeshStandardMaterial({ color: 0x24402c, roughness: 1 }));
+    lawn.rotation.x = -Math.PI / 2; lawn.position.y = -5;
+    scene.add(lawn);
+    const fenceTex = canvasTexture(512, 256, (g, w, h) => {
+      for (let i = 0; i < 12; i++) {
+        g.fillStyle = ['#4d3a33', '#574038', '#463530'][i % 3]; g.fillRect(i * w / 12, 0, w / 12, h);
+        g.fillStyle = 'rgba(0,0,0,.45)'; g.fillRect(i * w / 12, 0, 3, h);
+      }
+    }, [5, 1]);
+    const fence = new THREE.Mesh(new THREE.PlaneGeometry(80, 7), new THREE.MeshStandardMaterial({ map: fenceTex, roughness: 1 }));
+    fence.position.set(0, -1.5, -24);
+    scene.add(fence);
+
+    const glowTex = canvasTexture(64, 64, (g, w) => {
+      const r = g.createRadialGradient(w / 2, w / 2, 1, w / 2, w / 2, w / 2);
+      r.addColorStop(0, 'rgba(255,226,160,1)'); r.addColorStop(.3, 'rgba(255,190,100,.5)'); r.addColorStop(1, 'rgba(255,170,80,0)');
+      g.fillStyle = r; g.fillRect(0, 0, w, w);
+    });
+    const bulbMat = new THREE.MeshBasicMaterial({ color: 0xffe2a8 });
+    const bulbGeo = new THREE.SphereGeometry(.13, 10, 8);
+    const pts = [];
+    for (let i = 0; i <= 16; i++) {
+      const u = i / 16, x = lerp(-20, 20, u), y = 10.5 - Math.sin(u * Math.PI * 3) ** 2 * 2;
+      pts.push(V(x, y, -20));
+      const bulb = new THREE.Mesh(bulbGeo, bulbMat); bulb.position.set(x, y - .18, -20); scene.add(bulb);
+      const halo = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowTex, blending: THREE.AdditiveBlending, depthWrite: false, transparent: true }));
+      halo.scale.setScalar(1.5); halo.position.copy(bulb.position); scene.add(halo);
+    }
+    scene.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), new THREE.LineBasicMaterial({ color: 0x15131c })));
+
+    const label = (title, sub, bg, ink) => canvasTexture(256, 340, (g, w, h) => {
+      g.fillStyle = bg; g.fillRect(0, 0, w, h);
+      g.fillStyle = ink; g.textAlign = 'center';
+      g.font = '700 34px Georgia, serif'; g.fillText(title, w / 2, 130);
+      g.font = '700 22px Courier New, monospace'; g.fillText(sub, w / 2, 176);
+      g.fillRect(36, 200, w - 72, 5);
+    });
+    const bag = (x, z, rot, tex, color) => {
+      const mats = [0, 1, 2, 3, 4, 5].map(i => new THREE.MeshStandardMaterial(i === 4 ? { map: tex, roughness: .9 } : { color, roughness: .9 }));
+      const m = shadowed(new THREE.Mesh(new THREE.BoxGeometry(1.7, 2.4, .9), mats));
+      m.position.set(x, 1.2, z); m.rotation.y = rot; scene.add(m);
+    };
+    bag(-6.2, -5.2, .3, label('SEMOLINA', 'RIMACINATA 25 KG', '#f2e3b4', '#152a6e'), 0xf2e3b4);
+    bag(6.3, -6.2, -.35, label('PELLETS', '100% HARDWOOD', '#3e5d3a', '#f7efd8'), 0x3e5d3a);
+  })();
+
+  /* ---------- Outdoor pellet oven ---------- */
+  const DOOR_Z = -4.6, BACK_Z = -11.2, STONE_Z = -7.9;
+  const flames = [], smokePuffs = [];
+  (function oven() {
+    const oven = new THREE.Group();
+    scene.add(oven);
+    const steel = new THREE.MeshStandardMaterial({ color: 0xdfe0df, metalness: .5, roughness: .36 });
+    const black = new THREE.MeshStandardMaterial({ color: 0x17181b, metalness: .45, roughness: .5 });
+    const liner = new THREE.MeshStandardMaterial({ color: 0x2b211c, metalness: .3, roughness: .65, emissive: 0x4a1a06, emissiveIntensity: .7 });
+    const baseY = STONE_Y - .35;
+
+    const arch = (hw, wall, top, bottomY) => {
+      const s = new THREE.Shape();
+      s.moveTo(-hw, bottomY); s.lineTo(hw, bottomY); s.lineTo(hw, wall);
+      s.absellipse(0, wall, hw, top, 0, Math.PI, false);
+      s.lineTo(-hw, bottomY);
+      return s;
+    };
+    const holePath = (hw, wall, top, bottomY) => {
+      const p = new THREE.Path();
+      p.moveTo(-hw, bottomY); p.lineTo(hw, bottomY); p.lineTo(hw, wall);
+      p.absellipse(0, wall, hw, top, 0, Math.PI, false);
+      p.lineTo(-hw, bottomY);
+      return p;
+    };
+    const tube = (outer, hole, depth, mat, z) => {
+      outer.holes.push(hole);
+      const geo = new THREE.ExtrudeGeometry(outer, { depth, bevelEnabled: false, curveSegments: 36 });
+      const m = shadowed(new THREE.Mesh(geo, mat));
+      m.position.set(0, baseY, z);
+      oven.add(m);
+      return m;
+    };
+    tube(arch(3.1, 1, 1.9, 0), holePath(2.5, 1, .95, .12), DOOR_Z - BACK_Z, steel, BACK_Z);
+    tube(arch(2.52, 1, .97, .1), holePath(2.44, 1, .9, .14), DOOR_Z - BACK_Z - .05, liner, BACK_Z);
+    tube(arch(3.2, 1, 2, -.06), holePath(2.5, 1, .95, .35), .16, black, DOOR_Z - .02);
+    const belly = shadowed(new THREE.Mesh(new THREE.BoxGeometry(6.2, .1, 6.6), black));
+    belly.position.set(0, baseY, (DOOR_Z + BACK_Z) / 2);
+    oven.add(belly);
+    const backPlate = new THREE.Mesh(new THREE.BoxGeometry(5, 2.2, .1), new THREE.MeshStandardMaterial({ color: 0x150d09, emissive: 0x7a2606, emissiveIntensity: 1 }));
+    backPlate.position.set(0, STONE_Y + 1, BACK_Z + .1);
+    oven.add(backPlate);
+
+    const stoneTex = canvasTexture(256, 256, (g, w, h) => {
+      g.fillStyle = '#7d6d5b'; g.fillRect(0, 0, w, h);
+      const rnd = seeded(3);
+      for (let i = 0; i < 900; i++) { g.fillStyle = `rgba(${rnd() > .5 ? '60,48,38' : '228,214,190'},${.1 + rnd() * .22})`; g.fillRect(rnd() * w, rnd() * h, 2, 2); }
+      g.strokeStyle = 'rgba(40,30,22,.4)'; g.lineWidth = 2; g.strokeRect(1, 1, w - 2, h - 2);
+    }, [1, 1.3]);
+    const stone = shadowed(new THREE.Mesh(new THREE.BoxGeometry(4.96, .12, 6.5), new THREE.MeshStandardMaterial({ map: stoneTex, roughness: .9 })), false);
+    stone.position.set(0, STONE_Y - .06, (DOOR_Z + BACK_Z) / 2);
+    oven.add(stone);
+    const lip = shadowed(new THREE.Mesh(new THREE.BoxGeometry(5.3, .1, .55), black));
+    lip.position.set(0, STONE_Y - .05, DOOR_Z + .24);
+    oven.add(lip);
+
+    /* Three folding legs */
+    [[-2.6, DOOR_Z - .7, -.32], [2.6, DOOR_Z - .7, .32], [0, BACK_Z + .7, 0]].forEach(([x, z, tilt]) => {
+      const leg = shadowed(new THREE.Mesh(new THREE.CylinderGeometry(.09, .09, 1.12, 10), black));
+      leg.position.set(x + Math.sin(tilt) * .25, .5, z);
+      leg.rotation.z = tilt; if (!tilt) leg.rotation.x = .3;
+      oven.add(leg);
+      const foot = shadowed(new THREE.Mesh(new THREE.CylinderGeometry(.2, .22, .08, 12), black));
+      foot.position.set(x + Math.sin(tilt) * .45, .04, tilt ? z : z - .16);
+      oven.add(foot);
+    });
+
+    /* Chimney with a damper handle */
+    const flue = shadowed(new THREE.Mesh(new THREE.CylinderGeometry(.42, .46, 3.3, 24), steel));
+    flue.position.set(0, baseY + 4.2, -8.9);
+    oven.add(flue);
+    const collar = shadowed(new THREE.Mesh(new THREE.CylinderGeometry(.56, .62, .3, 24), black));
+    collar.position.set(0, baseY + 2.75, -8.9);
+    oven.add(collar);
+    const damper = shadowed(new THREE.Mesh(new THREE.BoxGeometry(1.4, .08, .12), black));
+    damper.position.set(.45, baseY + 3.9, -8.9);
+    oven.add(damper);
+    const cap = shadowed(new THREE.Mesh(new THREE.ConeGeometry(.72, .38, 24), black));
+    cap.position.set(0, baseY + 6.2, -8.9);
+    oven.add(cap);
+
+    /* Pellet hopper and burner box at the rear */
+    const hopper = shadowed(new THREE.Mesh(new THREE.CylinderGeometry(1.0, .55, 1.7, 4), black));
+    hopper.position.set(1.9, baseY + 3.1, -10.1);
+    hopper.rotation.y = Math.PI / 4;
+    oven.add(hopper);
+    const lid = shadowed(new THREE.Mesh(new THREE.BoxGeometry(1.55, .1, 1.55), steel));
+    lid.position.set(1.9, baseY + 4, -10.1);
+    lid.rotation.x = -.14;
+    oven.add(lid);
+    const chute = shadowed(new THREE.Mesh(new THREE.CylinderGeometry(.34, .34, 1.8, 12), black));
+    chute.position.set(1.7, baseY + 1.6, -10.4);
+    chute.rotation.z = .12;
+    oven.add(chute);
+    const handle = shadowed(new THREE.Mesh(new THREE.BoxGeometry(.65, .08, .08), black));
+    handle.position.set(1.9, baseY + 4.1, -9.5);
+    oven.add(handle);
+
+    /* Dial above the mouth */
+    const dial = new THREE.Mesh(new THREE.CircleGeometry(.36, 32), new THREE.MeshStandardMaterial({
+      roughness: .35,
+      map: canvasTexture(128, 128, (g, w) => {
+        g.fillStyle = '#f5f0e2'; g.beginPath(); g.arc(w / 2, w / 2, w / 2, 0, 7); g.fill();
+        g.strokeStyle = '#23211c'; g.lineWidth = 4;
+        for (let i = 0; i <= 10; i++) { const a = Math.PI * .75 + i / 10 * Math.PI * 1.5; g.beginPath(); g.moveTo(64 + Math.cos(a) * 44, 64 + Math.sin(a) * 44); g.lineTo(64 + Math.cos(a) * 56, 64 + Math.sin(a) * 56); g.stroke(); }
+        g.fillStyle = '#23211c'; g.font = '700 22px Courier New, monospace'; g.textAlign = 'center'; g.fillText('°C', 64, 98);
+        const a = Math.PI * .75 + .88 * Math.PI * 1.5; g.strokeStyle = '#b92a18'; g.lineWidth = 5; g.beginPath(); g.moveTo(64, 64); g.lineTo(64 + Math.cos(a) * 46, 64 + Math.sin(a) * 46); g.stroke();
+      })
+    }));
+    dial.position.set(0, baseY + 2.45, DOOR_Z + .16);
+    oven.add(dial);
+
+    /* Flames rolling from the rear burner across the roof */
+    const flameTex = canvasTexture(128, 128, (g, w) => {
+      const r = g.createRadialGradient(w / 2, w * .62, 2, w / 2, w * .55, w / 2);
+      r.addColorStop(0, 'rgba(255,244,190,1)'); r.addColorStop(.3, 'rgba(255,170,50,.9)'); r.addColorStop(.65, 'rgba(232,70,14,.42)'); r.addColorStop(1, 'rgba(160,20,0,0)');
+      g.fillStyle = r; g.fillRect(0, 0, w, w);
+    });
+    for (let i = 0; i < 20; i++) {
+      const u = i / 19, roof = i % 2 === 0;
+      const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: flameTex, color: 0xff9a44, opacity: .8, blending: THREE.AdditiveBlending, depthWrite: false, transparent: true }));
+      const base = roof
+        ? V(lerp(-1.7, 1.7, Math.random()), STONE_Y + 1.5 - u * .1, lerp(BACK_Z + .5, DOOR_Z - 2.1, u))
+        : V(lerp(-2.1, 2.1, u), STONE_Y + .6, BACK_Z + 1.5);
+      sprite.position.copy(base);
+      scene.add(sprite);
+      flames.push({ sprite, base, size: roof ? 1.3 : 1.9, phase: Math.random() * 7, speed: 7 + Math.random() * 7 });
+    }
+
+    const smokeTex = canvasTexture(96, 96, (g, w) => {
+      const r = g.createRadialGradient(w / 2, w / 2, 3, w / 2, w / 2, w / 2);
+      r.addColorStop(0, 'rgba(222,220,216,.75)'); r.addColorStop(.6, 'rgba(200,198,196,.3)'); r.addColorStop(1, 'rgba(190,190,190,0)');
+      g.fillStyle = r; g.fillRect(0, 0, w, w);
+    });
+    for (let i = 0; i < 26; i++) {
+      const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: smokeTex, depthWrite: false, transparent: true, opacity: 0 }));
+      scene.add(sprite);
+      smokePuffs.push({ sprite, life: i / 26 * 3.4, max: 3.4 });
+    }
+  })();
+  const CHIMNEY_TOP = V(0, STONE_Y - .35 + 6.3, -8.9);
+
+  /* ---------- Peel ---------- */
+  const PX = .01, PEEL_TOP = .1, REST_Z = .6, STOP_Z = -1.85;
+  const B = { x: 85, y: 125, w: 470, h: 440, r: 120 };
+  const peel = new THREE.Group();
+  peel.position.set(0, STONE_Y + .02 - PEEL_TOP, REST_Z);
+  scene.add(peel);
+  (function buildPeel() {
+    const hw = 2.35, hh = 2.2, r = 1.2, s = new THREE.Shape();
+    s.moveTo(-hw + r, hh); s.lineTo(hw - r, hh); s.quadraticCurveTo(hw, hh, hw, hh - r);
+    s.lineTo(hw, -hh + r); s.quadraticCurveTo(hw, -hh, hw - r, -hh); s.lineTo(.72, -hh);
+    s.quadraticCurveTo(.34, -hh - .25, .3, -hh - .85); s.lineTo(-.3, -hh - .85);
+    s.quadraticCurveTo(-.34, -hh - .25, -.72, -hh); s.lineTo(-hw + r, -hh);
+    s.quadraticCurveTo(-hw, -hh, -hw, -hh + r); s.lineTo(-hw, hh - r); s.quadraticCurveTo(-hw, hh, -hw + r, hh);
+    const geo = new THREE.ExtrudeGeometry(s, { depth: .05, bevelEnabled: true, bevelThickness: .025, bevelSize: .03, bevelSegments: 2, curveSegments: 18 });
+    geo.rotateX(-Math.PI / 2);
+    geo.translate(0, .025, 0);
+    const woodTex = canvasTexture(512, 512, (g, w, h) => {
+      g.fillStyle = '#94602f'; g.fillRect(0, 0, w, h);
+      const rnd = seeded(31);
+      for (let i = 0; i < 150; i++) {
+        const x = rnd() * w;
+        g.strokeStyle = rnd() > .5 ? 'rgba(84,46,16,.22)' : 'rgba(226,176,110,.22)';
+        g.lineWidth = .8 + rnd() * 2.4;
+        g.beginPath(); g.moveTo(x, 0); g.bezierCurveTo(x + rnd() * 26 - 13, h * .3, x + rnd() * 26 - 13, h * .7, x, h); g.stroke();
+      }
+    }, [.24, .24]);
+    const wood = new THREE.MeshStandardMaterial({ map: woodTex, roughness: .62 });
+    peel.add(shadowed(new THREE.Mesh(geo, wood)));
+    const handle = shadowed(new THREE.Mesh(new THREE.CylinderGeometry(.2, .22, 10, 16).rotateX(Math.PI / 2), wood));
+    handle.position.set(0, .05, 7.9);
+    peel.add(handle);
+  })();
+
+  /* Gold wash and stick map, painted on the blade */
+  const bladeCanvas = document.createElement('canvas');
+  bladeCanvas.width = 940; bladeCanvas.height = 880;
+  const bladeCtx = bladeCanvas.getContext('2d');
+  const bladeTex = new THREE.CanvasTexture(bladeCanvas);
+  bladeTex.encoding = THREE.sRGBEncoding;
+  const bladeTop = new THREE.Mesh(new THREE.PlaneGeometry(4.7, 4.4).rotateX(-Math.PI / 2), new THREE.MeshStandardMaterial({ map: bladeTex, transparent: true, roughness: .95, depthWrite: false }));
+  bladeTop.position.y = PEEL_TOP + .004;
+  bladeTop.receiveShadow = true;
+  peel.add(bladeTop);
+
+  const wash = document.createElement('canvas');
+  wash.width = COLS; wash.height = ROWS;
+  const washCtx = wash.getContext('2d');
+  const washImg = washCtx.createImageData(COLS, ROWS);
+  const density = new Float32Array(COLS * ROWS);
+  const KERNEL = [1 / 16, 4 / 16, 6 / 16, 4 / 16, 1 / 16];
+  let bladeDirty = true, bladeClock = 0;
+
+  /* 3D semolina */
+  const GRAIN_CAP = 3400;
+  const grainGeo = new THREE.IcosahedronGeometry(.02, 0);
+  const grainMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: .8 });
+  const peelGrains = new THREE.InstancedMesh(grainGeo, grainMat, GRAIN_CAP);
+  const tableGrains = new THREE.InstancedMesh(grainGeo, grainMat, 900);
+  /* Both meshes share a material, so both need an instance colour buffer before the first render. */
+  [peelGrains, tableGrains].forEach(m => { m.setColorAt(0, new THREE.Color(0xf4d97c)); m.count = 0; m.frustumCulled = false; });
+  peel.add(peelGrains); scene.add(tableGrains);
+  let peelGrainIndex = 0, tableGrainIndex = 0;
+  const GRAIN_COLORS = [0xf4d97c, 0xeac55a, 0xfbe9a6, 0xd9ad45].map(c => new THREE.Color(c));
+  const dummy = new THREE.Object3D();
+  function placeGrain(mesh, index, x, y, z) {
+    dummy.position.set(x, y, z);
+    dummy.rotation.set(Math.random() * 6, Math.random() * 6, 0);
+    dummy.scale.setScalar(.7 + Math.random() * .8);
+    dummy.updateMatrix();
+    mesh.setMatrixAt(index, dummy.matrix);
+    mesh.setColorAt(index, pick(GRAIN_COLORS));
+    mesh.instanceMatrix.needsUpdate = true;
+    mesh.instanceColor.needsUpdate = true;
+  }
+
+  const FALL_CAP = 260;
+  const fallPos = new Float32Array(FALL_CAP * 3).fill(-999);
+  const fallGeo = new THREE.BufferGeometry();
+  fallGeo.setAttribute('position', new THREE.BufferAttribute(fallPos, 3));
+  const fallPoints = new THREE.Points(fallGeo, new THREE.PointsMaterial({ color: 0xf7dd86, size: .055 }));
+  fallPoints.frustumCulled = false;
+  scene.add(fallPoints);
+  let falling = [];
+
+  /* Shaker */
+  const shaker = new THREE.Group();
+  (function buildShaker() {
+    const tin = new THREE.MeshStandardMaterial({ color: 0xd7dbe0, metalness: .85, roughness: .32 });
+    const body = shadowed(new THREE.Mesh(new THREE.CylinderGeometry(.42, .42, 1.15, 28), tin));
+    const band = new THREE.Mesh(new THREE.CylinderGeometry(.43, .43, .55, 28), new THREE.MeshStandardMaterial({ color: 0xb92a18, roughness: .5 }));
+    band.position.y = .05;
+    const capMesh = shadowed(new THREE.Mesh(new THREE.SphereGeometry(.44, 28, 12, 0, Math.PI * 2, 0, Math.PI / 2), tin));
+    capMesh.rotation.x = Math.PI; capMesh.scale.y = .55; capMesh.position.y = -.58;
+    shaker.add(body, band, capMesh);
+    const hole = new THREE.SphereGeometry(.028, 6, 5), holeMat = new THREE.MeshBasicMaterial({ color: 0x1b1b1f });
+    for (let ring = 1; ring <= 3; ring++) for (let i = 0; i < ring * 6; i++) {
+      const a = i / (ring * 6) * Math.PI * 2, d = ring * .115;
+      const dot = new THREE.Mesh(hole, holeMat);
+      dot.position.set(Math.cos(a) * d, -.58 - Math.sqrt(Math.max(0, .19 - d * d)) * .55, Math.sin(a) * d);
+      shaker.add(dot);
+    }
+  })();
+  shaker.visible = false;
+  shaker.scale.setScalar(.68);
+  scene.add(shaker);
+
+  /* Aim line from the peel to the door */
+  const aimLine = new THREE.Mesh(new THREE.PlaneGeometry(.07, 1).rotateX(-Math.PI / 2), new THREE.MeshBasicMaterial({ color: 0xfff1c4, transparent: true, opacity: .75, depthWrite: false }));
+  aimLine.visible = false;
+  scene.add(aimLine);
+
+  /* ---------- Pizza ---------- */
+  const toppingGeos = {
+    pep: new THREE.CylinderGeometry(.2, .2, .04, 16),
+    leaf: new THREE.SphereGeometry(.22, 10, 6),
+    blob: new THREE.SphereGeometry(.26, 10, 6),
+    olive: new THREE.TorusGeometry(.08, .04, 6, 12),
+    shroom: new THREE.CylinderGeometry(.17, .13, .05, 10),
+    bit: new THREE.BoxGeometry(.09, .03, .05)
+  };
+  const toppingMats = {
+    pep: new THREE.MeshStandardMaterial({ color: 0xa82a1a, roughness: .45 }),
+    leaf: new THREE.MeshStandardMaterial({ color: 0x2f7a3d, roughness: .5 }),
+    blob: new THREE.MeshStandardMaterial({ color: 0xfaf0cf, roughness: .45 }),
+    gold: new THREE.MeshStandardMaterial({ color: 0xf2cf63, roughness: .45 }),
+    olive: new THREE.MeshStandardMaterial({ color: 0x1d1c1e, roughness: .3 }),
+    shroom: new THREE.MeshStandardMaterial({ color: 0xc3a688, roughness: .7 }),
+    garlic: new THREE.MeshStandardMaterial({ color: 0xf4e9c8, roughness: .6 }),
+    herb: new THREE.MeshStandardMaterial({ color: 0x46612c, roughness: .8 }),
+    blue: new THREE.MeshStandardMaterial({ color: 0x5f7da6, roughness: .6 })
+  };
+
+  function buildPizza(round, seed) {
+    const R = round.inch * WORLD_PER_INCH / 2;
+    const rnd = seeded(seed);
+    const group = new THREE.Group();
+    const doughMat = new THREE.MeshStandardMaterial({ color: 0xe6c088, roughness: .75, side: THREE.DoubleSide });
+    const topTex = canvasTexture(512, 512, (g, w) => {
+      g.fillStyle = '#bd2f1b'; g.fillRect(0, 0, w, w);
+      for (let i = 0; i < 90; i++) { g.fillStyle = `rgba(${rnd() > .5 ? '140,24,10' : '222,76,40'},.25)`; g.beginPath(); g.arc(rnd() * w, rnd() * w, 6 + rnd() * 24, 0, 7); g.fill(); }
+      if (round.tops !== 'garlic') for (let i = 0; i < 26; i++) { g.fillStyle = 'rgba(248,236,200,.9)'; g.beginPath(); g.arc(70 + rnd() * 372, 70 + rnd() * 372, 16 + rnd() * 34, 0, 7); g.fill(); }
+    });
+    const topMat = new THREE.MeshStandardMaterial({ map: topTex, roughness: .55 });
+    const profile = [[0, .05], [R * .86, .055], [R * .91, .13], [R * .97, .15], [R, .09], [R * .97, .02], [R * .9, 0], [0, 0]].map(p => new THREE.Vector2(p[0], p[1]));
+    const own = [];
+    const half = (start) => {
+      const h = new THREE.Group();
+      const dough = new THREE.LatheGeometry(profile, 44, start, Math.PI);
+      const disc = new THREE.CircleGeometry(R * .88, 44, start - Math.PI / 2, Math.PI).rotateX(-Math.PI / 2);
+      own.push(dough, disc);
+      const a = shadowed(new THREE.Mesh(dough, doughMat)), b = new THREE.Mesh(disc, topMat);
+      b.position.y = .062;
+      const tops = new THREE.Group();
+      h.add(a, b, tops);
+      h.userData.tops = tops;
+      group.add(h);
+      return h;
+    };
+    const halfA = half(0), halfB = half(Math.PI);
+    const scatter = (geo, mat, count, sx, sy, sz) => {
+      for (let i = 0; i < count; i++) {
+        const a = rnd() * Math.PI * 2, d = Math.sqrt(rnd()) * R * .74;
+        const x = Math.sin(a) * d, z = Math.cos(a) * d;
+        const m = new THREE.Mesh(toppingGeos[geo], mat);
+        m.position.set(x, .085, z);
+        m.rotation.y = rnd() * 6;
+        m.scale.set(sx, sy, sz);
+        m.castShadow = geo === 'pep' || geo === 'leaf';
+        (x >= 0 ? halfA : halfB).userData.tops.add(m);
+      }
+    };
+    const k = round.inch / 10;
+    if (round.tops === 'basil') { scatter('blob', toppingMats.blob, 9, 1.2, .2, 1.2); scatter('leaf', toppingMats.leaf, 6, 1, .14, .55); }
+    if (round.tops === 'garlic') { scatter('bit', toppingMats.garlic, 24, 1, 1, 1); scatter('bit', toppingMats.herb, 34, .5, .8, .5); }
+    if (round.tops === 'pepperoni') { scatter('blob', toppingMats.blob, 9, 1.2, .2, 1.2); scatter('pep', toppingMats.pep, Math.round(11 * k), 1, 1, 1); }
+    if (round.tops === 'cheese') { scatter('blob', toppingMats.blob, 12, 1.3, .22, 1.3); scatter('blob', toppingMats.gold, 12, 1.1, .22, 1.1); scatter('bit', toppingMats.blue, 26, .7, 1, .7); }
+    if (round.tops === 'everything') { scatter('blob', toppingMats.blob, 9, 1.2, .2, 1.2); scatter('pep', toppingMats.pep, 11, 1, 1, 1); scatter('leaf', toppingMats.leaf, 5, 1, .14, .55); scatter('olive', toppingMats.olive, 10, 1, 1, .6); scatter('shroom', toppingMats.shroom, 9, 1, 1, 1); }
+    group.traverse(o => { if (o.geometry === toppingGeos.olive) o.rotation.x = Math.PI / 2; });
+    return { group, halfA, halfB, doughMat, topMat, topTex, own, R, bake: 0 };
+  }
+  function disposePizza(p) {
+    if (!p) return;
+    p.group.parent && p.group.parent.remove(p.group);
+    p.own.forEach(g => g.dispose());
+    p.doughMat.dispose(); p.topMat.dispose(); p.topTex.dispose();
+  }
+  const doughRaw = new THREE.Color(0xe6c088), doughDone = new THREE.Color(0x8b5428);
+  function setBake(p, amount) {
+    p.bake = amount;
+    p.doughMat.color.copy(doughRaw).lerp(doughDone, amount);
+    const v = 1 - amount * .55;
+    p.topMat.color.setRGB(v, v * .96, v * .9);
+  }
+
+  /* ---------- Sound ---------- */
+  let audio = null, master, buses, tickBufs, noiseBuf, soundOn = true;
+  function initAudio() {
+    if (audio) { audio.resume && audio.resume(); return; }
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return;
+    audio = new AC();
+    master = audio.createGain(); master.gain.value = soundOn ? 1 : 0; master.connect(audio.destination);
+    const room = audio.createDelay(.2); room.delayTime.value = .038;
+    const roomGain = audio.createGain(); roomGain.gain.value = .16;
+    room.connect(roomGain); roomGain.connect(master);
+    const bus = (type, freq, q, vol) => {
+      const f = audio.createBiquadFilter(); f.type = type; f.frequency.value = freq; f.Q.value = q;
+      const g = audio.createGain(); g.gain.value = vol;
+      f.connect(g); g.connect(master); g.connect(room);
+      return f;
+    };
+    buses = { tin: bus('bandpass', 4300, 1.4, 1.1), rattle: bus('bandpass', 2300, 2.2, .9), wood: bus('bandpass', 1250, 1.2, 1.25), soft: bus('lowpass', 1900, .6, .55), table: bus('bandpass', 720, 1.5, 1) };
+    tickBufs = [5, 8, 11, 15, 20, 28].map(ms => {
+      const len = Math.ceil(audio.sampleRate * ms / 1000), buf = audio.createBuffer(1, len, audio.sampleRate), d = buf.getChannelData(0);
+      for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 3);
+      return buf;
+    });
+    noiseBuf = audio.createBuffer(1, audio.sampleRate * 2, audio.sampleRate);
+    const d = noiseBuf.getChannelData(0);
+    let brown = 0;
+    for (let i = 0; i < d.length; i++) { brown = (brown + (Math.random() * 2 - 1) * .04) / 1.01; d[i] = brown * 3; }
+    const fire = audio.createBufferSource(); fire.buffer = noiseBuf; fire.loop = true;
+    const fireLow = audio.createBiquadFilter(); fireLow.type = 'lowpass'; fireLow.frequency.value = 340;
+    const fireGain = audio.createGain(); fireGain.gain.value = .09;
+    fire.connect(fireLow); fireLow.connect(fireGain); fireGain.connect(master); fire.start();
+  }
+  function tick(bus, when, vol, rate) {
+    const src = audio.createBufferSource(); src.buffer = pick(tickBufs); src.playbackRate.value = rate;
+    const g = audio.createGain(); g.gain.value = vol;
+    src.connect(g); g.connect(bus); src.start(when);
+  }
+  function knock(when, freq, vol, len) {
+    const o = audio.createOscillator(), g = audio.createGain();
+    o.type = 'triangle';
+    o.frequency.setValueAtTime(freq * 1.5, when); o.frequency.exponentialRampToValueAtTime(freq, when + .018);
+    g.gain.setValueAtTime(vol, when); g.gain.exponentialRampToValueAtTime(.001, when + len);
+    o.connect(g); g.connect(master); o.start(when); o.stop(when + len + .02);
+  }
+  /* One flick of the wrist: tin knock, grains rattling in the tin, then grains landing on whatever is below. */
+  function shakeSound(strength, surface, grainsOut) {
+    if (!audio) return;
+    const now = audio.currentTime + .004;
+    knock(now, 130 + Math.random() * 90, .17 * strength, .055 + Math.random() * .03);
+    knock(now + .05 + Math.random() * .02, 210 + Math.random() * 120, .07 * strength, .04);
+    const rattles = 7 + Math.floor(Math.random() * 11 * strength);
+    for (let i = 0; i < rattles; i++) {
+      const at = now + Math.pow(Math.random(), 1.7) * .085;
+      tick(Math.random() < .55 ? buses.rattle : buses.tin, at, (.1 + Math.random() * .24) * strength, .65 + Math.random() * 1.1);
+    }
+    const landings = Math.min(13, Math.round(grainsOut * .55));
+    for (let i = 0; i < landings; i++) {
+      const at = now + .13 + Math.random() * .19;
+      tick(buses[surface], at, .06 + Math.random() * .17, (surface === 'table' ? .5 : .7) + Math.random() * .75);
+    }
+  }
+  function whoosh() {
+    if (!audio) return;
+    const src = audio.createBufferSource(); src.buffer = tickBufs[5]; src.loop = true;
+    const bp = audio.createBiquadFilter(); bp.type = 'bandpass'; bp.Q.value = 1;
+    const g = audio.createGain(), now = audio.currentTime;
+    bp.frequency.setValueAtTime(300, now); bp.frequency.exponentialRampToValueAtTime(2100, now + .42);
+    g.gain.setValueAtTime(.001, now); g.gain.exponentialRampToValueAtTime(.5, now + .14); g.gain.exponentialRampToValueAtTime(.001, now + .55);
+    src.connect(bp); bp.connect(g); g.connect(master); src.start(now); src.stop(now + .6);
+  }
+  function tone(freq, at, len, type = 'sine', vol = .1) {
+    if (!audio) return;
+    const o = audio.createOscillator(), g = audio.createGain(), now = audio.currentTime + at;
+    o.type = type; o.frequency.value = freq;
+    g.gain.setValueAtTime(vol, now); g.gain.exponentialRampToValueAtTime(.001, now + len);
+    o.connect(g); g.connect(master); o.start(now); o.stop(now + len + .02);
+  }
+  const ding = () => { tone(784, 0, .25); tone(1175, .13, .45); };
+  const sadTrombone = () => { [392, 370, 349, 311].forEach((f, i) => tone(f, i * .28, i === 3 ? .8 : .32, 'sawtooth', .05)); };
+  const clang = () => { [410, 633, 1187, 1730].forEach((f, i) => tone(f, 0, .8 - i * .12, 'triangle', .13 / (i + 1))); };
+  function sizzle() {
+    if (!audio) return;
+    const now = audio.currentTime;
+    for (let i = 0; i < 46; i++) tick(buses.tin, now + Math.random() * 1.1, .05 + Math.random() * .12, 1 + Math.random());
+  }
+
+  /* ---------- Game state ---------- */
+  const S = {
+    mode: 'title', round: 0, r: null, fx: 320, fy: 345, radius: 135, limit: 15, time: 10, timeLeft: 10,
+    clockOn: false, grams: 0, nextShake: 0, shakeCount: 0, kick: 0, scores: [], pizza: null, wind: 0, soak: 0,
+    dust: { stick: 1, overBy: 0 }, t: 0, end: 2.6, result: null, flare: 0, smokeBoost: 0, fromZ: REST_Z, fromX: 0
+  };
+  const pointer = { u: 320, v: 345, down: false, seen: false, keys: new Set(), space: false, speed: 0, lastU: 320, lastV: 345 };
+  const aim = { active: false, sx: 0, sy: 0, pull: 0, side: 0, power: 0 };
+
+  const chefName = () => $('chef').value.trim() || 'Chef';
+  const fill = (text, pizzaName) => text.replaceAll('{n}', chefName()).replaceAll('{p}', pizzaName || '');
+  function showView(name) { ['Start', 'Dust', 'Throw', 'Result', 'Final'].forEach(v => { $('v' + v).hidden = v !== name; }); }
+  const totalScore = () => S.scores.reduce((a, s) => a + s.pts, 0);
+  const coverBar = () => (S.r ? S.r.need : 1) * .8;
+
+  function deposit(u, v) {
+    const i = Math.floor(u / CELL), j = Math.floor(v / CELL);
+    for (let dj = -2; dj <= 2; dj++) for (let di = -2; di <= 2; di++) {
+      const ci = i + di, cj = j + dj;
+      if (ci < 0 || cj < 0 || ci >= COLS || cj >= ROWS) continue;
+      density[cj * COLS + ci] += KERNEL[di + 2] * KERNEL[dj + 2];
+    }
+    bladeDirty = true;
+  }
+  function inBlade(u, v) {
+    if (u < B.x || u > B.x + B.w || v < B.y || v > B.y + B.h) return false;
+    const cx = clamp(u, B.x + B.r, B.x + B.w - B.r), cy = clamp(v, B.y + B.r, B.y + B.h - B.r);
+    return (u - cx) ** 2 + (v - cy) ** 2 <= B.r ** 2;
+  }
+  function bakeGrain(u, v) {
+    if (inBlade(u, v)) {
+      deposit(u, v);
+      const cell = density[Math.floor(v / CELL) * COLS + Math.floor(u / CELL)] || 0;
+      placeGrain(peelGrains, peelGrainIndex, (u - 320) * PX, PEEL_TOP + .012 + Math.min(.05, cell * .012) * Math.random(), (v - 345) * PX);
+      peelGrainIndex = (peelGrainIndex + 1) % GRAIN_CAP;
+      peelGrains.count = Math.min(GRAIN_CAP, peelGrains.count + 1);
+    } else {
+      placeGrain(tableGrains, tableGrainIndex, (u - 320) * PX + peel.position.x, .02, (v - 345) * PX + peel.position.z);
+      tableGrainIndex = (tableGrainIndex + 1) % 900;
+      tableGrains.count = Math.min(900, tableGrains.count + 1);
+    }
+  }
+
+  function paintBlade() {
+    const need = coverBar(), data = washImg.data;
+    for (let n = 0; n < density.length; n++) {
+      const ratio = density[n] / need, p = n * 4;
+      data[p] = 247; data[p + 1] = 208; data[p + 2] = 92;
+      data[p + 3] = ratio >= 1 ? 215 : 110 * ratio;
+    }
+    washCtx.putImageData(washImg, 0, 0);
+    const g = bladeCtx;
+    g.setTransform(1, 0, 0, 1, 0, 0);
+    g.clearRect(0, 0, 940, 880);
+    g.setTransform(2, 0, 0, 2, -B.x * 2, -B.y * 2);
+    g.save();
+    g.beginPath(); g.roundRect(B.x, B.y, B.w, B.h, B.r); g.clip();
+    g.imageSmoothingEnabled = true;
+    g.drawImage(wash, 0, 0, COLS * CELL, ROWS * CELL);
+    if (S.mode === 'result' || S.mode === 'final') {
+      const reach = (S.radius * .94) ** 2;
+      for (let j = 0; j < ROWS; j++) for (let i = 0; i < COLS; i++) {
+        const cx = (i + .5) * CELL - S.fx, cy = (j + .5) * CELL - S.fy;
+        if (cx * cx + cy * cy > reach) continue;
+        const ratio = density[j * COLS + i] / need;
+        if (ratio >= 1) continue;
+        g.fillStyle = `rgba(205,32,20,${.55 + .35 * (1 - ratio)})`;
+        g.fillRect(i * CELL, j * CELL, CELL, CELL);
+      }
+    }
+    g.restore();
+    if (S.mode === 'dust' || S.mode === 'title') {
+      g.setLineDash([13, 10]); g.lineWidth = 3.5; g.strokeStyle = '#fffaf0';
+      g.beginPath(); g.arc(S.fx, S.fy, S.radius, 0, 7); g.stroke();
+      g.setLineDash([]);
+    }
+    bladeTex.needsUpdate = true;
+  }
+
+  function setRound(i) {
+    const r = ROUNDS[i];
+    S.round = i; S.r = r;
+    S.radius = r.inch * 13.5;
+    S.fx = 320 + r.dx; S.fy = 345 + r.dy;
+    const grainsNeeded = Math.PI * S.radius ** 2 / (CELL * CELL) * r.need;
+    S.limit = Math.round(grainsNeeded * GRAIN_G * r.slack);
+    S.time = Math.max(10, Math.ceil(grainsNeeded / POUR_RATE * r.tf));
+    S.timeLeft = S.time; S.clockOn = false; S.grams = 0; S.soak = 0; S.result = null;
+    S.wind = r.wind ? Math.round(r.wind * (.85 + Math.random() * .3)) * (Math.random() < .5 ? -1 : 1) : 0;
+    S.flare = 0; S.smokeBoost = 0;
+    density.fill(0); bladeDirty = true;
+    peelGrains.count = 0; tableGrains.count = 0; peelGrainIndex = 0; tableGrainIndex = 0;
+    falling = []; fallPos.fill(-999);
+    disposePizza(S.pizza); S.pizza = null;
+    peel.position.set(0, peel.position.y, REST_Z); peel.rotation.set(0, 0, 0);
+    Object.assign(aim, { active: false, pull: 0, side: 0, power: 0 });
+    $('tOrder').textContent = `Order ${i + 1} of ${ROUNDS.length}`;
+    $('tScore').textContent = `${totalScore()} pts`;
+    $('tName').textContent = r.name;
+    $('tNote').textContent = r.note;
+    $('sSize').textContent = `${r.inch} in`;
+    $('sHyd').textContent = `${r.hyd}%`;
+    $('sMax').textContent = `${S.limit} g`;
+    $('tLabel').textContent = 'Dough lands in';
+    $('tSpecs').hidden = false; $('tMeters').hidden = false; $('tTally').hidden = true; $('tNote').hidden = false;
+    $('windArrow').textContent = S.wind === 0 ? '·' : S.wind > 0 ? '→' : '←';
+    $('windVal').textContent = S.wind === 0 ? 'calm' : `${Math.abs(S.wind)} km/h`;
+    updateMeters();
+  }
+  function updateMeters() {
+    $('gVal').textContent = `${S.grams.toFixed(1)} g`;
+    $('gBar').style.width = `${clamp(S.grams / S.limit) * 100}%`;
+    $('gMeter').classList.toggle('over', S.grams > S.limit);
+    if (S.mode === 'throw') {
+      const left = Math.max(0, SOAK_GRACE - S.soak);
+      $('tVal').textContent = left > 0 ? `${Math.ceil(left)} s` : `+${Math.round(soakStick() * 100)}% stuck`;
+      $('tBar').style.width = `${left / SOAK_GRACE * 100}%`;
+      $('tMeter').classList.toggle('over', left <= 2);
+    } else {
+      $('tVal').textContent = `${Math.ceil(S.timeLeft)} s`;
+      $('tBar').style.width = `${clamp(S.timeLeft / S.time) * 100}%`;
+      $('tMeter').classList.toggle('over', S.timeLeft <= 3 && S.clockOn);
+    }
+  }
+  function startRound(i) {
+    setRound(i);
+    S.mode = 'dust';
+    bladeDirty = true;
+    showView('Dust');
+    $('wind').hidden = false;
+    $('dustHint').textContent = 'The clock starts with your first shake.';
+    $('loadBtn').disabled = false;
+  }
+
+  function judgeDust() {
+    let total = 0, bad = 0;
+    const need = coverBar(), reach = (S.radius * .94) ** 2;
+    for (let j = 0; j < ROWS; j++) for (let i = 0; i < COLS; i++) {
+      const x = (i + .5) * CELL - S.fx, y = (j + .5) * CELL - S.fy;
+      if (x * x + y * y > reach) continue;
+      total++;
+      if (density[j * COLS + i] < need) bad++;
+    }
+    return { stick: total ? bad / total : 1, overBy: Math.max(0, S.grams - S.limit) / S.limit };
+  }
+  const soakStick = () => Math.max(0, S.soak - SOAK_GRACE) * .025;
+  const currentStick = () => clamp(S.dust.stick + soakStick());
+  /* Sticky dough needs a harder throw. Excess semolina acts like ball bearings and needs a softer one. */
+  const targetPower = () => clamp(.6 - Math.min(.12, S.dust.overBy * .6) + Math.min(.18, currentStick() * .3), .3, .85);
+
+  function loadPizza() {
+    if (S.mode !== 'dust') return;
+    pointer.down = false; pointer.space = false;
+    S.dust = judgeDust();
+    S.mode = 'throw'; S.soak = 0; S.dropT = 0;
+    S.pizza = buildPizza(S.r, 40 + S.round * 13);
+    S.pizza.group.position.set((S.fx - 320) * PX, PEEL_TOP + 3, (S.fy - 345) * PX);
+    peel.add(S.pizza.group);
+    bladeDirty = true;
+    $('tLabel').textContent = 'Soaks through in';
+    $('throwHint').textContent = S.wind === 0
+      ? 'Drag down to pull the peel back, steer at the door, and let go in the green zone.'
+      : `Drag down to pull back and let go in the green zone. The wind will push the pizza ${S.wind > 0 ? 'right' : 'left'}, so aim ${S.wind > 0 ? 'left' : 'right'} of centre.`;
+    showView('Throw');
+    $('gauge').hidden = false;
+    canvas.focus({ preventScroll: true });
+  }
+
+  function releaseThrow() {
+    if (S.mode !== 'throw') return;
+    const r = S.r, stick = currentStick(), overBy = S.dust.overBy, pt = targetPower();
+    const wob = reduceMotion ? 0 : Math.sin(performance.now() / 200) * r.wobble;
+    const power = clamp(aim.pull + wob), e = power - pt;
+    const peelInches = peel.position.x / WORLD_PER_INCH, drift = S.wind * .16, landX = peelInches + drift;
+    const tol = (DOOR_INCHES - r.inch) / 2;
+    let outcome = 'glide';
+    if (stick > .5) outcome = 'stuck';
+    else if (Math.abs(landX) > tol) outcome = 'door';
+    else if (e < -r.band) outcome = 'short';
+    else if (e > r.band) outcome = 'long';
+    else if (stick > .2) outcome = 'calzone';
+    else if (overBy > .03) outcome = 'beach';
+    else if (stick > .06) outcome = 'snag';
+    const dustPts = Math.max(0, 100 * Math.pow(1 - stick, 1.6) - Math.min(50, overBy * 120));
+    const depthQ = clamp(1 - Math.abs(e) / (r.band * 2)), lineQ = clamp(1 - Math.abs(landX) / (tol * 2));
+    const throwPts = 100 * depthQ * lineQ;
+    let pts = dustPts * .55 + throwPts * .45;
+    pts = Math.min(pts, { stuck: 15, calzone: 45, door: 40, short: 50, long: 45 }[outcome] ?? 100);
+    const landText = outcome === 'door' ? 'Missed the door' : e < -r.band ? 'Too soft' : e > r.band ? 'Too hard' : Math.abs(landX) < 1 ? 'Dead centre' : `${Math.abs(landX).toFixed(1)} in ${landX > 0 ? 'right' : 'left'}`;
+    S.result = { outcome, stick, e, landX, pts: Math.round(pts), landText };
+    S.mode = 'launch'; S.t = 0; S.detached = false; S.arrived = false;
+    S.fromZ = peel.position.z; S.fromX = peel.position.x;
+    S.end = { glide: 2.5, snag: 2.5, calzone: 2.8, stuck: 2.5, beach: 2.9, door: 2.7, short: 2.7, long: 2.8 }[outcome];
+    aim.active = false; aim.pull = 0;
+    $('gauge').hidden = true; aimLine.visible = false;
+  }
+
+  function showCallout(text) {
+    if (!text) return;
+    $('callout').textContent = text; $('callout').hidden = false;
+    clearTimeout(showCallout.timer);
+    showCallout.timer = setTimeout(() => { $('callout').hidden = true; }, 1500);
+  }
+
+  function arrive(o) {
+    if (o === 'glide') { ding(); sizzle(); }
+    if (o === 'snag') { sizzle(); sadTrombone(); }
+    if (o === 'calzone') { sizzle(); sadTrombone(); S.smokeBoost = 1.5; }
+    if (o === 'beach') { sizzle(); sadTrombone(); S.smokeBoost = 5; }
+    if (o === 'door') { clang(); }
+    if (o === 'short') { sadTrombone(); }
+    if (o === 'long') { sizzle(); sadTrombone(); S.flare = 1; S.smokeBoost = 3; }
+    if (o === 'stuck') { sadTrombone(); S.smokeBoost = 2; }
+    showCallout(CALLOUTS[o]);
+  }
+
+  function updateLaunch(dt) {
+    S.t += dt;
+    const t = S.t, P = S.pizza, o = S.result.outcome;
+    if (t < .2) { peel.position.z = lerp(S.fromZ, STOP_Z, easeIn(t / .2)); return endCheck(); }
+    if (!S.detached) {
+      S.detached = true;
+      whoosh();
+      if (o !== 'stuck') { scene.attach(P.group); S.pFrom = P.group.position.clone(); }
+    }
+    const back = easeOut(clamp((t - .2) / .7));
+    peel.position.z = lerp(STOP_Z, REST_Z, back);
+    peel.position.x = lerp(S.fromX, 0, back);
+    peel.rotation.y = lerp(-S.fromX * .05, 0, back);
+    if (o === 'stuck') {
+      const q = clamp((t - .2) / .8), e = easeOut(q);
+      [P.halfA, P.halfB].forEach(h => { const tops = h.userData.tops; tops.position.z = -e * 8; tops.position.y = Math.sin(q * Math.PI) * .8; tops.visible = q < 1; });
+    } else {
+      const dur = { door: .28, short: .55, long: .5 }[o] || .62;
+      const q = clamp((t - .2) / dur), e = easeOut(q);
+      const landX = S.result.landX * WORLD_PER_INCH;
+      const endZ = { door: DOOR_Z + 1.2, short: DOOR_Z - .1, long: BACK_Z + 2 }[o] ?? clamp(STONE_Z - S.result.e * 6, STONE_Z - 1.1, STONE_Z + 1.1);
+      const g = P.group;
+      g.position.x = lerp(S.pFrom.x, o === 'door' ? clamp(landX, -3, 3) : landX, e);
+      g.position.z = lerp(S.pFrom.z, endZ, e);
+      g.position.y = lerp(S.pFrom.y, STONE_Y + .01, e) + Math.sin(q * Math.PI) * .16;
+      if (o === 'snag') { const w = Math.sin(clamp(q * 1.6) * Math.PI / 2); g.scale.set(1 + .22 * w, 1, 1 - .18 * w); g.rotation.y = w * .5; }
+      if (o === 'calzone') { P.halfB.rotation.z = -easeOut(clamp(q * 1.25)) * Math.PI * .97; g.rotation.y = q * .5; }
+      if (o === 'long') { g.scale.z = 1 - .36 * clamp((q - .5) * 2); setBake(P, Math.min(1, P.bake + dt * 1.2)); }
+      if (q >= 1 && !S.arrived) { S.arrived = true; arrive(o); }
+      if (S.arrived) {
+        const after = t - .2 - dur;
+        if (o === 'door') {
+          const f = clamp(after / .55);
+          P.halfB.rotation.z = -easeOut(f) * Math.PI * .8;
+          g.position.y = lerp(STONE_Y + .01, .05, f * f);
+          g.position.z = endZ + f * 1.1;
+          g.rotation.x = Math.sin(f * Math.PI) * .7;
+        }
+        if (o === 'short') g.rotation.x = clamp(after / 1.1) * .34;
+        if (o === 'glide' || o === 'snag' || o === 'beach' || o === 'calzone') { setBake(P, Math.min(.5, P.bake + dt * .35)); if (o !== 'snag') g.rotation.y += dt * .25; }
+      }
+    }
+    if (o === 'stuck' && t > 1 && !S.arrived) { S.arrived = true; arrive(o); }
+    endCheck();
+  }
+  function endCheck() { if (S.t >= S.end) finishLaunch(); }
+
+  function finishLaunch() {
+    const R = S.result, v = VERDICTS[R.outcome], r = S.r;
+    S.mode = 'result';
+    S.scores.push({ name: r.name, title: v.title, pts: R.pts });
+    bladeDirty = true;
+    if (R.outcome === 'stuck') { [S.pizza.doughMat, S.pizza.topMat].forEach(m => { m.transparent = true; m.opacity = .35; }); }
+    $('rTitle').textContent = v.title;
+    $('rTitle').className = 'verdict ' + v.tone;
+    const mapNote = R.stick > .005 ? ' Red patches show where it stuck.' : '';
+    $('rLine').textContent = fill(pick(v.lines), r.name) + mapNote;
+    $('rStick').textContent = `Stuck ${Math.round(R.stick * 100)}%`;
+    $('rGrams').textContent = `${S.grams.toFixed(1)} of ${S.limit} g`;
+    $('rThrow').textContent = R.landText;
+    $('rPts').textContent = `+${R.pts} pts`;
+    $('tScore').textContent = `${totalScore()} pts`;
+    $('nextBtn').textContent = S.round + 1 < ROUNDS.length ? 'Next pizza' : 'Close the oven';
+    showView('Result');
+    $('dock').scrollIntoView({ block: 'nearest', behavior: reduceMotion ? 'auto' : 'smooth' });
+    $('nextBtn').focus({ preventScroll: true });
+  }
+  function finishShift() {
+    S.mode = 'final';
+    const total = totalScore(), rank = RANKS.find(x => total >= x[0]);
+    $('tOrder').textContent = 'End of shift';
+    $('tScore').textContent = `${total} pts`;
+    $('tName').textContent = rank[1];
+    $('tNote').hidden = true; $('tSpecs').hidden = true; $('tMeters').hidden = true;
+    const list = $('tTally'); list.replaceChildren();
+    S.scores.forEach(s => {
+      const li = document.createElement('li');
+      const a = document.createElement('span'), b = document.createElement('span');
+      a.textContent = `${s.name}: ${s.title}`; b.textContent = s.pts;
+      li.append(a, b); list.append(li);
+    });
+    list.hidden = false;
+    $('fScore').textContent = `${total} out of 500`;
+    $('fScore').className = 'verdict ' + (total >= 350 ? 'good' : 'bad');
+    $('fLine').textContent = fill(rank[2]);
+    $('copyBtn').textContent = 'Copy my score';
+    $('shareText').hidden = true;
+    S.share = `${chefName()} scored ${total}/500 on More Semolina. Rank: ${rank[1]}.`;
+    showView('Final');
+    $('wind').hidden = true;
+    $('dock').scrollIntoView({ block: 'nearest', behavior: reduceMotion ? 'auto' : 'smooth' });
+    $('againBtn').focus({ preventScroll: true });
+  }
+
+  /* ---------- Frame update ---------- */
+  const SHAKE_ACCENTS = [1, .68, .86, .58, 1.12, .72];
+  function doShake(now) {
+    const interval = clamp(.165 - pointer.speed * .00011, .09, .165) * (.85 + Math.random() * .3);
+    S.nextShake = now + interval;
+    const strength = SHAKE_ACCENTS[S.shakeCount++ % SHAKE_ACCENTS.length] * (.9 + Math.random() * .2);
+    const burst = Math.round(POUR_RATE * interval);
+    S.grams += burst * GRAIN_G;
+    S.kick = 1;
+    const spawn = V((pointer.u - 320) * PX + peel.position.x, PEEL_TOP + peel.position.y + 1.25, (pointer.v - 345) * PX + peel.position.z);
+    for (let i = 0; i < burst; i++) {
+      falling.push({
+        u: pointer.u + gauss() * SPREAD, v: pointer.v + gauss() * SPREAD, t: -Math.random() * interval * .5, dur: .2 + Math.random() * .08,
+        sx: spawn.x + (Math.random() - .5) * .3, sy: spawn.y, sz: spawn.z + (Math.random() - .5) * .3
+      });
+    }
+    const cell = density[Math.floor(pointer.v / CELL) * COLS + Math.floor(pointer.u / CELL)] || 0;
+    const surface = !inBlade(pointer.u, pointer.v) ? 'table' : cell >= coverBar() ? 'soft' : 'wood';
+    shakeSound(strength, surface, burst);
+  }
+
+  function update(dt, now) {
+    if (pointer.keys.size && S.mode === 'dust') {
+      const v = 300 * dt;
+      if (pointer.keys.has('ArrowLeft')) pointer.u -= v;
+      if (pointer.keys.has('ArrowRight')) pointer.u += v;
+      if (pointer.keys.has('ArrowUp')) pointer.v -= v;
+      if (pointer.keys.has('ArrowDown')) pointer.v += v;
+      pointer.u = clamp(pointer.u, 40, W - 40); pointer.v = clamp(pointer.v, 80, H - 80);
+      pointer.seen = true;
+    }
+    const moved = Math.hypot(pointer.u - pointer.lastU, pointer.v - pointer.lastV) / Math.max(dt, .001);
+    pointer.speed = lerp(pointer.speed, moved, .2);
+    pointer.lastU = pointer.u; pointer.lastV = pointer.v;
+
+    const pouring = S.mode === 'dust' && (pointer.down || pointer.space);
+    if (pouring) {
+      if (!S.clockOn) { S.clockOn = true; $('dustHint').textContent = 'Load the pizza before the timer runs out.'; }
+      /* Catch up after a slow frame so the pour rate never depends on the frame rate. */
+      if (S.nextShake < now - .4) S.nextShake = now;
+      while (now >= S.nextShake) doShake(S.nextShake);
+    }
+    S.kick = Math.max(0, S.kick - dt * 8);
+
+    falling = falling.filter(p => {
+      p.t += dt;
+      if (p.t >= p.dur) { bakeGrain(p.u, p.v); return false; }
+      return true;
+    });
+    for (let i = 0; i < FALL_CAP; i++) {
+      const p = falling[i], n = i * 3;
+      if (!p || p.t < 0) { fallPos[n + 1] = -999; continue; }
+      const q = p.t / p.dur, tx = (p.u - 320) * PX + peel.position.x, tz = (p.v - 345) * PX + peel.position.z;
+      fallPos[n] = lerp(p.sx, tx, q);
+      fallPos[n + 1] = lerp(p.sy, peel.position.y + PEEL_TOP, q * q);
+      fallPos[n + 2] = lerp(p.sz, tz, q);
+    }
+    fallGeo.attributes.position.needsUpdate = true;
+
+    if (S.mode === 'dust') {
+      if (S.clockOn) { S.timeLeft = Math.max(0, S.timeLeft - dt); if (S.timeLeft === 0) loadPizza(); }
+      updateMeters();
+    }
+    if (S.mode === 'throw') {
+      S.soak += dt;
+      S.dropT += dt;
+      const d = clamp(S.dropT / .42), group = S.pizza.group;
+      group.position.y = PEEL_TOP + (1 - easeOut(d)) * 3;
+      const squash = d >= 1 ? Math.max(0, 1 - (S.dropT - .42) * 6) * .12 : 0;
+      group.scale.set(1 + squash, 1, 1 + squash);
+      if (aim.keyCharge) aim.pull = clamp(aim.pull + dt * .55);
+      if (pointer.keys.has('ArrowLeft')) aim.side = clamp(aim.side - dt * 1.3, -1, 1);
+      if (pointer.keys.has('ArrowRight')) aim.side = clamp(aim.side + dt * 1.3, -1, 1);
+      const wob = reduceMotion ? 0 : Math.sin(now / .2) * S.r.wobble * (aim.pull > .02 ? 1 : 0);
+      aim.power = clamp(aim.pull + wob);
+      const k = 1 - Math.pow(.0005, dt);
+      peel.position.z = lerp(peel.position.z, REST_Z + aim.pull * 2.5, k);
+      peel.position.x = lerp(peel.position.x, aim.side * 1.3, k);
+      peel.rotation.y = -peel.position.x * .05;
+      const pt = targetPower();
+      $('gBand').style.bottom = `${(pt - S.r.band) * 100}%`;
+      $('gBand').style.height = `${S.r.band * 200}%`;
+      $('gNeedle').style.bottom = `${aim.power * 100}%`;
+      const farEdge = peel.position.z - 2.3, len = farEdge - DOOR_Z;
+      aimLine.visible = aim.pull > .02 || aim.side !== 0;
+      aimLine.scale.z = Math.max(.01, len);
+      aimLine.position.set(peel.position.x, STONE_Y + .03, DOOR_Z + len / 2);
+      updateMeters();
+    }
+    if (S.mode === 'launch') updateLaunch(dt);
+
+    bladeClock += dt;
+    if (bladeDirty && bladeClock > .09) { bladeClock = 0; bladeDirty = false; paintBlade(); }
+
+    /* Shaker follows the pointer */
+    shaker.visible = S.mode === 'dust' && pointer.seen;
+    if (shaker.visible) {
+      const px = (pointer.u - 320) * PX + peel.position.x, pz = (pointer.v - 345) * PX + peel.position.z;
+      const kick = reduceMotion ? 0 : S.kick;
+      shaker.position.set(px + .28, peel.position.y + PEEL_TOP + 1.95 + kick * .32, pz + .1);
+      shaker.rotation.set(.1, 0, -.32 - kick * .28);
+    }
+
+    /* Fire */
+    S.flare = Math.max(0, S.flare - dt * .6);
+    const tSec = now;
+    flames.forEach(f => {
+      const flick = .72 + Math.sin(tSec * f.speed + f.phase) * .2 + Math.sin(tSec * f.speed * 2.3 + f.phase) * .08;
+      f.sprite.scale.setScalar(f.size * flick * (1 + S.flare * .9));
+      f.sprite.position.y = f.base.y + Math.sin(tSec * 3 + f.phase) * .1;
+      f.sprite.position.x = f.base.x + S.wind * .006;
+    });
+    ovenLight.intensity = 1.4 + Math.sin(tSec * 13) * .25 + Math.sin(tSec * 29) * .15 + S.flare * 4;
+
+    /* Chimney smoke leans with the wind */
+    S.smokeBoost = Math.max(0, S.smokeBoost - dt * .8);
+    smokePuffs.forEach(p => {
+      p.life += dt;
+      if (p.life >= p.max) p.life -= p.max;
+      const q = p.life / p.max;
+      p.sprite.position.set(CHIMNEY_TOP.x + S.wind * .022 * q * q * 7 + Math.sin(q * 9 + p.max) * .14, CHIMNEY_TOP.y + q * 4.5, CHIMNEY_TOP.z);
+      p.sprite.scale.setScalar(.6 + q * (2.6 + S.smokeBoost * .5));
+      p.sprite.material.opacity = (reduceMotion ? .25 : .5) * (1 - q) * Math.min(1, q * 8) * (1 + S.smokeBoost * .45);
+    });
+    updateCamera(dt);
+  }
+
+  /* ---------- Camera ---------- */
+  const SHOTS = {
+    home: { p: V(0, 7, 13.5), t: V(0, 2.7, -5) },
+    dust: { p: V(0, 8.6, 5.2), t: V(0, 1.1, .1) },
+    oven: { p: V(0, 3.5, 1.6), t: V(0, 1.8, -8) }
+  };
+  const camPos = SHOTS.home.p.clone(), camTarget = SHOTS.home.t.clone();
+  function updateCamera(dt) {
+    const shot = S.mode === 'dust' ? SHOTS.dust : (S.mode === 'launch' && S.t > .15) ? SHOTS.oven : SHOTS.home;
+    const k = reduceMotion ? 1 : 1 - Math.pow(.02, dt);
+    camPos.lerp(shot.p, k); camTarget.lerp(shot.t, k);
+    camera.position.copy(camPos);
+    camera.lookAt(camTarget);
+  }
+
+  /* ---------- Input ---------- */
+  const ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
+  const peelPlane = new THREE.Plane(V(0, 1, 0), 0), hit = V(0, 0, 0);
+  function aimPointer(e) {
+    const rect = canvas.getBoundingClientRect();
+    const touchLift = e.pointerType === 'touch' ? 44 : 0;
+    ndc.set(((e.clientX - rect.left) / rect.width) * 2 - 1, -(((e.clientY - touchLift - rect.top) / rect.height) * 2 - 1));
+    camera.updateMatrixWorld();
+    ray.setFromCamera(ndc, camera);
+    peelPlane.constant = -(peel.position.y + PEEL_TOP);
+    if (ray.ray.intersectPlane(peelPlane, hit)) {
+      pointer.u = clamp((hit.x - peel.position.x) / PX + 320, 30, W - 30);
+      pointer.v = clamp((hit.z - peel.position.z) / PX + 345, 60, H - 60);
+      pointer.seen = true;
+    }
+  }
+  function throwDrag(e) {
+    const rect = canvas.getBoundingClientRect();
+    aim.pull = clamp((e.clientY - aim.sy) / (rect.height * .36));
+    aim.side = clamp((e.clientX - aim.sx) / (rect.width * .3), -1, 1);
+  }
+  canvas.addEventListener('pointerdown', e => {
+    initAudio();
+    if (S.mode === 'dust') {
+      aimPointer(e); pointer.down = true; S.nextShake = 0;
+    } else if (S.mode === 'throw') {
+      aim.active = true; aim.sx = e.clientX; aim.sy = e.clientY;
+    } else return;
+    try { canvas.setPointerCapture(e.pointerId); } catch (err) { /* synthetic pointers have no capture */ }
+    e.preventDefault();
+  });
+  canvas.addEventListener('pointermove', e => {
+    if (S.mode === 'dust') aimPointer(e);
+    if (S.mode === 'throw' && aim.active) throwDrag(e);
+  });
+  const endPress = () => {
+    pointer.down = false;
+    if (S.mode === 'throw' && aim.active) {
+      aim.active = false;
+      if (aim.pull > .1) releaseThrow(); else { aim.pull = 0; aim.side = 0; }
+    }
+  };
+  canvas.addEventListener('pointerup', endPress);
+  canvas.addEventListener('pointercancel', () => { pointer.down = false; aim.active = false; aim.pull = 0; });
+  canvas.addEventListener('pointerleave', e => { if (!pointer.down && e.pointerType !== 'touch') pointer.seen = false; });
+  canvas.addEventListener('keydown', e => {
+    if (e.key.startsWith('Arrow')) { pointer.keys.add(e.key); e.preventDefault(); }
+    if (e.key === ' ') {
+      e.preventDefault(); initAudio();
+      if (S.mode === 'dust') { pointer.space = true; pointer.seen = true; }
+      if (S.mode === 'throw' && !e.repeat) aim.keyCharge = true;
+    }
+  });
+  canvas.addEventListener('keyup', e => {
+    pointer.keys.delete(e.key);
+    if (e.key === ' ') {
+      pointer.space = false;
+      if (aim.keyCharge) { aim.keyCharge = false; if (aim.pull > .1) releaseThrow(); else aim.pull = 0; }
+    }
+  });
+  canvas.addEventListener('blur', () => { pointer.keys.clear(); pointer.space = false; aim.keyCharge = false; });
+
+  function beginShift() {
+    initAudio();
+    S.scores = [];
+    startRound(0);
+    canvas.focus({ preventScroll: true });
+  }
+  $('startBtn').addEventListener('click', beginShift);
+  $('againBtn').addEventListener('click', beginShift);
+  $('loadBtn').addEventListener('click', loadPizza);
+  $('nextBtn').addEventListener('click', () => {
+    if (S.round + 1 < ROUNDS.length) { startRound(S.round + 1); canvas.focus({ preventScroll: true }); }
+    else finishShift();
+  });
+  $('soundBtn').addEventListener('click', () => {
+    soundOn = !soundOn;
+    if (master) master.gain.value = soundOn ? 1 : 0;
+    $('soundBtn').textContent = soundOn ? 'Sound on' : 'Sound off';
+    $('soundBtn').setAttribute('aria-pressed', String(soundOn));
+  });
+  $('copyBtn').addEventListener('click', () => {
+    const fallback = () => { $('shareText').textContent = S.share; $('shareText').hidden = false; };
+    try { navigator.clipboard.writeText(S.share).then(() => { $('copyBtn').textContent = 'Copied'; }, fallback); }
+    catch (err) { fallback(); }
+  });
+
+  function resize() {
+    const rect = $('frame').getBoundingClientRect();
+    const w = Math.max(1, Math.round(canvas.parentElement.clientWidth)), h = Math.max(1, Math.round(canvas.parentElement.clientHeight));
+    renderer.setSize(w, h, false);
+    camera.aspect = rect.width / rect.height || 1;
+    camera.updateProjectionMatrix();
+  }
+  new ResizeObserver(resize).observe($('frame'));
+  resize();
+
+  /* Opening frame: a half-dusted peel in the garden, so the idea is visible before anyone presses Start. */
+  setRound(0);
+  const demo = seeded(12);
+  for (let i = 0; i < 620; i++) {
+    const a = -2.5 + demo() * 2.9, d = Math.sqrt(demo()) * S.radius * 1.02;
+    bakeGrain(S.fx + Math.cos(a) * d, S.fy + Math.sin(a) * d);
+  }
+  paintBlade();
+
+  /* Slow devices step down in quality rather than letting the game run in slow motion. */
+  let last = performance.now(), slowFrames = 0, quality = 2;
+  function adaptQuality(rawDt) {
+    if (rawDt > .5 || document.hidden) return; /* A paused or background tab says nothing about the device. */
+    slowFrames = rawDt > .045 ? slowFrames + 1 : Math.max(0, slowFrames - 1);
+    if (slowFrames < 24 || quality === 0) return;
+    slowFrames = 0; quality--;
+    if (quality === 1) { renderer.setPixelRatio(1); resize(); }
+    if (quality === 0) { renderer.shadowMap.autoUpdate = false; sun.castShadow = false; renderer.setPixelRatio(.7); resize(); }
+  }
+  function frame(ms) {
+    const rawDt = (ms - last) / 1000;
+    const dt = Math.min(.12, rawDt);
+    last = ms;
+    adaptQuality(rawDt);
+    update(dt, ms / 1000);
+    renderer.render(scene, camera);
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
