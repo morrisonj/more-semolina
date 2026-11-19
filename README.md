@@ -30,4 +30,4 @@ The **Copy a link with this name** button on the start screen builds this link f
 
 Everything is in `index.html`: plain HTML, CSS and JavaScript with [three.js](https://threejs.org/) r128 loaded from cdnjs. There is no build step. Open the file in a browser (with an internet connection for three.js and Google Fonts), or serve the folder with any static host.
 
-The site is hosted on statiq.page, which redeploys whenever `main` is pushed.
+The site is hosted on [statiq.page](https://statiq.page), which redeploys whenever `main` is pushed.
