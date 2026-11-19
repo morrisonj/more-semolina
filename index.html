@@ -156,7 +156,10 @@ input[type="text"] {
 .verdict.bad { color: var(--sauce); }
 .verdict.good { color: var(--good); }
 .stats { display: flex; flex-wrap: wrap; gap: 4px 18px; font-family: var(--mono); font-size: 15px; font-weight: 700; }
-#shareText { font-family: var(--mono); font-size: 14px; background: var(--ticket); color: var(--ticket-ink); padding: 8px 10px; user-select: all; }
+.linktext { font-family: var(--mono); font-size: 14px; background: var(--ticket); color: var(--ticket-ink); padding: 8px 10px; user-select: all; overflow-wrap: anywhere; }
+a.plain { display: block; text-align: center; text-decoration: none; }
+.greet { font-family: var(--display); font-size: 26px; line-height: 1.1; }
+.card { display: block; width: 100%; max-width: 100%; border: 3px solid var(--ink); background: var(--kraft-deep); }
 button:focus-visible, input:focus-visible, canvas:focus-visible { outline: 3px solid var(--sauce); outline-offset: 2px; }
 
 .stage { grid-area: stage; min-width: 0; position: sticky; top: 20px; display: flex; justify-content: center; }
@@ -237,10 +240,13 @@ canvas#c { display: block; width: 100%; height: 100%; cursor: crosshair; touch-a
         <li>Drag back to load the throw and steer it at the oven door.</li>
         <li>Let go in the green zone. Allow for the wind.</li>
       </ol>
+      <p class="greet" id="greet" hidden></p>
       <label for="chef">Who's on the peel tonight?
         <input id="chef" type="text" maxlength="24" placeholder="Your friend's name" autocomplete="off">
       </label>
       <button class="go" id="startBtn" type="button">Light the oven</button>
+      <button class="plain" id="inviteBtn" type="button">Copy a link with this name</button>
+      <p class="linktext" id="inviteText" hidden></p>
     </div>
     <div class="view" id="vDust" hidden>
       <p id="dustHint">The clock starts with your first shake.</p>
@@ -259,9 +265,12 @@ canvas#c { display: block; width: 100%; height: 100%; cursor: crosshair; touch-a
     <div class="view" id="vFinal" hidden>
       <div class="verdict" id="fScore"></div>
       <p id="fLine"></p>
-      <button class="go" id="againBtn" type="button">Another shift</button>
+      <img class="card" id="cardImg" alt="Score card showing the last pizza, the rank and all five results" hidden>
+      <button class="go" id="shareCardBtn" type="button" hidden>Send the score card</button>
+      <a class="plain" id="saveCard" download="more-semolina-score.png" hidden>Save the score card</a>
       <button class="plain" id="copyBtn" type="button">Copy my score</button>
-      <p id="shareText" hidden></p>
+      <p class="linktext" id="shareText" hidden></p>
+      <button class="plain" id="againBtn" type="button">Another shift</button>
     </div>
   </section>
 
@@ -1186,11 +1195,97 @@ canvas#c { display: block; width: 100%; height: 100%; cursor: crosshair; touch-a
     $('fLine').textContent = fill(rank[2]);
     $('copyBtn').textContent = 'Copy my score';
     $('shareText').hidden = true;
-    S.share = `${chefName()} scored ${total}/500 on More Semolina. Rank: ${rank[1]}.`;
+    S.share = `${chefName()} scored ${total}/500 on More Semolina. Rank: ${rank[1]}. Beat that: ${siteURL()}`;
+    $('cardImg').hidden = true; $('shareCardBtn').hidden = true; $('saveCard').hidden = true;
     showView('Final');
     $('wind').hidden = true;
     $('dock').scrollIntoView({ block: 'nearest', behavior: reduceMotion ? 'auto' : 'smooth' });
     $('againBtn').focus({ preventScroll: true });
+    makeScoreCard(total, rank[1]).catch(() => { /* The text copy still works without the picture. */ });
+  }
+
+  /* ---------- Score card ---------- */
+  const PUBLIC_SITE = 'https://more-semolina.statiq.page/';
+  function siteURL(name) {
+    const local = /^https?:$/.test(location.protocol) && !/claude/.test(location.hostname);
+    const url = new URL(local ? location.origin + location.pathname : PUBLIC_SITE);
+    if (name) url.searchParams.set('chef', name);
+    return url.toString();
+  }
+  async function makeScoreCard(total, rankName) {
+    /* Photograph the whole garden scene, not wherever the camera is mid-move. */
+    camPos.copy(SHOTS.home.p); camTarget.copy(SHOTS.home.t);
+    camera.position.copy(camPos); camera.lookAt(camTarget);
+    renderer.render(scene, camera);
+    const W = 1080, H = 1350, c = document.createElement('canvas');
+    c.width = W; c.height = H;
+    const g = c.getContext('2d');
+    /* The WebGL buffer is only readable straight after a render, so copy it before awaiting fonts. */
+    const shot = document.createElement('canvas');
+    shot.width = canvas.width; shot.height = canvas.height;
+    shot.getContext('2d').drawImage(canvas, 0, 0);
+    try { await Promise.all(['64px Shrikhand', '700 30px "Courier Prime"', '30px "Courier Prime"', '700 28px Karla'].map(f => document.fonts.load(f))); } catch (err) { /* fall back to system faces */ }
+    const ink = '#152a6e', cream = '#fbf6e6', paper = '#23211c', sauce = '#b92a18';
+
+    g.fillStyle = '#cfa974'; g.fillRect(0, 0, W, H);
+    g.fillStyle = 'rgba(90,58,20,.06)';
+    for (let x = 0; x < W; x += 7) g.fillRect(x + 5, 0, 2, H);
+
+    g.fillStyle = ink;
+    g.font = '700 26px Karla, Arial, sans-serif';
+    g.fillText('PIZZA LAUNCH SIMULATOR', 64, 82);
+    g.save(); g.translate(60, 190); g.rotate(-.03);
+    g.font = '104px Shrikhand, Georgia, serif';
+    g.fillStyle = '#bd9560'; g.fillText('More Semolina', 6, 6);
+    g.fillStyle = ink; g.fillText('More Semolina', 0, 0);
+    g.restore();
+
+    const px = 60, py = 240, pw = 960, ph = 560;
+    const scale = Math.max(pw / shot.width, ph / shot.height), sw = pw / scale, sh = ph / scale;
+    g.drawImage(shot, (shot.width - sw) / 2, (shot.height - sh) / 2, sw, sh, px, py, pw, ph);
+    g.lineWidth = 8; g.strokeStyle = ink; g.strokeRect(px, py, pw, ph);
+
+    const tx = 60, ty = 850, tw = 960, th = 400;
+    g.fillStyle = cream; g.fillRect(tx, ty, tw, th);
+    g.beginPath(); g.moveTo(tx, ty + th);
+    for (let x = tx; x < tx + tw; x += 32) { g.lineTo(x + 16, ty + th + 16); g.lineTo(x + 32, ty + th); }
+    g.closePath(); g.fill();
+    g.fillStyle = paper; g.textAlign = 'left';
+    g.font = '30px "Courier Prime", monospace';
+    g.fillText(`CHEF: ${chefName().toUpperCase()}`, tx + 36, ty + 58);
+    g.font = '700 50px "Courier Prime", monospace';
+    g.fillText(rankName.toUpperCase(), tx + 36, ty + 122);
+    g.strokeStyle = '#cfc6ab'; g.lineWidth = 2; g.setLineDash([8, 8]);
+    g.beginPath(); g.moveTo(tx + 36, ty + 150); g.lineTo(tx + tw - 36, ty + 150); g.stroke(); g.setLineDash([]);
+    g.font = '30px "Courier Prime", monospace';
+    S.scores.forEach((s, i) => {
+      const y = ty + 200 + i * 42;
+      g.textAlign = 'left'; g.fillText(`${s.name}: ${s.title}`.slice(0, 44), tx + 36, y);
+      g.textAlign = 'right'; g.font = '700 30px "Courier Prime", monospace'; g.fillText(String(s.pts), tx + tw - 36, y);
+      g.font = '30px "Courier Prime", monospace';
+    });
+
+    g.save(); g.translate(890, 790); g.rotate(-.18);
+    g.fillStyle = sauce; g.beginPath(); g.arc(0, 0, 118, 0, Math.PI * 2); g.fill();
+    g.lineWidth = 5; g.strokeStyle = cream; g.beginPath(); g.arc(0, 0, 104, 0, Math.PI * 2); g.stroke();
+    g.fillStyle = cream; g.textAlign = 'center';
+    g.font = '64px Shrikhand, Georgia, serif'; g.fillText(String(total), 0, 14);
+    g.font = '700 26px "Courier Prime", monospace'; g.fillText('OUT OF 500', 0, 54);
+    g.restore();
+
+    g.textAlign = 'center'; g.fillStyle = ink;
+    g.font = '700 30px Karla, Arial, sans-serif';
+    g.fillText(siteURL().replace(/^https?:\/\//, '').replace(/\/$/, ''), W / 2, H - 34);
+
+    const blob = await new Promise(res => c.toBlob(res, 'image/png'));
+    if (!blob || S.mode !== 'final') return;
+    if (S.cardURL) URL.revokeObjectURL(S.cardURL);
+    S.cardURL = URL.createObjectURL(blob);
+    S.cardFile = new File([blob], 'more-semolina-score.png', { type: 'image/png' });
+    $('cardImg').src = S.cardURL; $('cardImg').hidden = false;
+    $('saveCard').href = S.cardURL; $('saveCard').hidden = false;
+    const canShare = navigator.canShare && navigator.canShare({ files: [S.cardFile] });
+    $('shareCardBtn').hidden = !canShare;
   }
 
   /* ---------- Frame update ---------- */
@@ -1416,11 +1511,30 @@ canvas#c { display: block; width: 100%; height: 100%; cursor: crosshair; touch-a
     $('soundBtn').textContent = soundOn ? 'Sound on' : 'Sound off';
     $('soundBtn').setAttribute('aria-pressed', String(soundOn));
   });
-  $('copyBtn').addEventListener('click', () => {
-    const fallback = () => { $('shareText').textContent = S.share; $('shareText').hidden = false; };
-    try { navigator.clipboard.writeText(S.share).then(() => { $('copyBtn').textContent = 'Copied'; }, fallback); }
+  function copyText(text, button, doneLabel, fallbackEl) {
+    const fallback = () => { fallbackEl.textContent = text; fallbackEl.hidden = false; };
+    try { navigator.clipboard.writeText(text).then(() => { button.textContent = doneLabel; }, fallback); }
     catch (err) { fallback(); }
+  }
+  $('copyBtn').addEventListener('click', () => copyText(S.share, $('copyBtn'), 'Copied', $('shareText')));
+  $('inviteBtn').addEventListener('click', () => {
+    const name = $('chef').value.trim();
+    copyText(siteURL(name), $('inviteBtn'), name ? `Link for ${name} copied` : 'Link copied', $('inviteText'));
   });
+  $('chef').addEventListener('input', () => { $('inviteBtn').textContent = 'Copy a link with this name'; $('inviteText').hidden = true; });
+  $('shareCardBtn').addEventListener('click', () => {
+    navigator.share({ files: [S.cardFile], text: S.share }).catch(() => { /* cancelled */ });
+  });
+
+  /* A link such as ?chef=Dave fills in the name and greets that person by name. */
+  (function nameFromLink() {
+    let name = '';
+    try { const q = new URLSearchParams(location.search); name = (q.get('chef') || q.get('name') || '').trim().slice(0, 24); } catch (err) { /* no query string */ }
+    if (!name) return;
+    $('chef').value = name;
+    $('greet').textContent = `${name}, the oven is at 500°C and everyone is watching.`;
+    $('greet').hidden = false;
+  })();
 
   function resize() {
     const rect = $('frame').getBoundingClientRect();
