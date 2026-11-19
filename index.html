@@ -157,6 +157,8 @@ input[type="text"] {
 .verdict.good { color: var(--good); }
 .stats { display: flex; flex-wrap: wrap; gap: 4px 18px; font-family: var(--mono); font-size: 15px; font-weight: 700; }
 .linktext { font-family: var(--mono); font-size: 14px; background: var(--ticket); color: var(--ticket-ink); padding: 8px 10px; user-select: all; overflow-wrap: anywhere; }
+.helplink { font-weight: 700; }
+.helplink a { color: var(--ink); text-underline-offset: 3px; }
 a.plain { display: block; text-align: center; text-decoration: none; }
 .greet { font-family: var(--display); font-size: 26px; line-height: 1.1; }
 .card { display: block; width: 100%; max-width: 100%; border: 3px solid var(--ink); background: var(--kraft-deep); }
@@ -240,6 +242,7 @@ canvas#c { display: block; width: 100%; height: 100%; cursor: crosshair; touch-a
         <li>Drag back to load the throw and steer it at the oven door.</li>
         <li>Let go in the green zone. Allow for the wind.</li>
       </ol>
+      <p class="helplink"><a href="how-to-play.html">Full instructions, results and scoring</a></p>
       <p class="greet" id="greet" hidden></p>
       <label for="chef">Who's on the peel tonight?
         <input id="chef" type="text" maxlength="24" placeholder="Your friend's name" autocomplete="off">

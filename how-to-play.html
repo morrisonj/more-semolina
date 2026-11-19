@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How to Play · More Semolina</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Karla:wght@400;600;700&family=Shrikhand&display=swap">
+<style>
+:root {
+  --kraft: #cfa974;
+  --kraft-deep: #bd9560;
+  --ink: #152a6e;
+  --ticket: #fbf6e6;
+  --ticket-ink: #23211c;
+  --rule: #cfc6ab;
+  --sauce: #b92a18;
+  --good: #1d5a2c;
+  --display: "Shrikhand", Georgia, serif;
+  --body: "Karla", "Helvetica Neue", Arial, sans-serif;
+  --mono: "Courier Prime", "Courier New", monospace;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background-color: var(--kraft);
+  background-image: repeating-linear-gradient(90deg, transparent 0 5px, rgba(90, 58, 20, .055) 5px 7px);
+  color: var(--ink);
+  font: 17px/1.55 var(--body);
+  padding: 28px max(16px, env(safe-area-inset-right, 0px)) 48px max(16px, env(safe-area-inset-left, 0px));
+}
+main { max-width: 720px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1fr); gap: 22px; }
+main > * { min-width: 0; }
+.top { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; font-weight: 700; font-size: 13px; letter-spacing: .09em; text-transform: uppercase; }
+a { color: var(--ink); text-underline-offset: 3px; }
+a:focus-visible { outline: 3px solid var(--sauce); outline-offset: 2px; }
+h1 { margin: 0; font: 400 clamp(40px, 8vw, 58px)/1 var(--display); transform: rotate(-2deg); transform-origin: left bottom; text-shadow: 3px 3px 0 var(--kraft-deep); }
+.lede { margin: 0; font-size: 19px; max-width: 60ch; }
+section { background: var(--ticket); color: var(--ticket-ink); padding: 20px 22px 24px; display: grid; gap: 10px; }
+section h2 { margin: 0; font: 700 22px/1.2 var(--mono); text-transform: uppercase; border-bottom: 1px dashed var(--rule); padding-bottom: 8px; }
+section p, section ul, section ol { margin: 0; }
+ul, ol { padding-left: 22px; display: grid; gap: 6px; }
+b { font-weight: 700; }
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 15px; }
+th, td { text-align: left; padding: 7px 10px 7px 0; border-bottom: 1px dashed var(--rule); vertical-align: top; }
+th { font: 700 13px var(--mono); text-transform: uppercase; }
+td:first-child { font-weight: 700; white-space: nowrap; }
+.bad { color: var(--sauce); }
+.good { color: var(--good); }
+.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+code { font: 15px var(--mono); background: #efe7cf; padding: 1px 5px; overflow-wrap: anywhere; }
+.play {
+  justify-self: start;
+  display: inline-block;
+  background: var(--ink);
+  color: var(--ticket);
+  text-decoration: none;
+  font: 400 24px/1.1 var(--display);
+  padding: 12px 22px 13px;
+  box-shadow: 4px 4px 0 var(--kraft-deep);
+}
+</style>
+
+<main>
+  <div class="top"><span>Pizza launch simulator</span><a href="./">Back to the game</a></div>
+  <h1>How to Play</h1>
+  <p class="lede">Five pizzas, one peel, one outdoor oven. Each pizza has two jobs: get enough semolina under it, then throw it onto the stone.</p>
+
+  <section>
+    <h2>1. Dust the peel</h2>
+    <ul>
+      <li><b>Hold and drag</b> on the peel to shake semolina. On a keyboard, move with the arrow keys and hold the space bar.</li>
+      <li>Cover the <b>dashed circle</b>. That's where the dough will land. A patch turns <b>gold</b> once it has enough semolina. Any patch left bare will stick.</li>
+      <li>Watch the <b>On the scale</b> meter. Stay under the ticket's <b>Max semolina</b>, because the extra burns on the oven stone.</li>
+      <li>The clock starts with your first shake. If it runs out, the dough lands anyway, ready or not.</li>
+      <li>Press <b>Load the pizza</b> when the circle is gold.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>2. Throw it</h2>
+    <ul>
+      <li><b>Drag down</b> anywhere on the scene to pull the peel back. The power needle rises as you pull.</li>
+      <li><b>Drag left or right</b> to line the peel up with the oven door. A faint line shows where you're aiming.</li>
+      <li><b>Let go</b> when the needle is in the <b>green zone</b>. Letting go after only a tiny pull cancels the throw.</li>
+      <li>On a keyboard, hold the space bar to build power, steer with the left and right arrows, and release the space bar to throw.</li>
+      <li>The needle wobbles a little, and more so on later pizzas, so time your release.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>3. Things working against you</h2>
+    <ul>
+      <li><b>Wind.</b> From the second pizza on, the wind pushes the pizza sideways in flight. Check the wind chip and the chimney smoke, then aim the other way.</li>
+      <li><b>Sticky dough.</b> Bare patches make the dough grip the peel, so the green zone moves up and you need a harder throw.</li>
+      <li><b>Too much semolina.</b> It works like ball bearings. The green zone moves down and the pizza slides further.</li>
+      <li><b>Waiting.</b> After the pizza is loaded you have 5 seconds. Then moisture starts soaking through and the dough gets stickier every second.</li>
+      <li><b>Bigger, wetter dough.</b> Every order is larger or wetter than the last, so it needs a thicker coat and leaves less room at the door.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>The orders</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Pizza</th><th>Size</th><th>Hydration</th><th>Wind</th></tr></thead>
+        <tbody>
+          <tr><td>Margherita</td><td class="num">10 in</td><td class="num">60%</td><td>Calm</td></tr>
+          <tr><td>Marinara</td><td class="num">12 in</td><td class="num">65%</td><td>Light breeze</td></tr>
+          <tr><td>Diavola</td><td class="num">12 in</td><td class="num">70%</td><td>Picking up</td></tr>
+          <tr><td>Quattro Formaggi</td><td class="num">14 in</td><td class="num">74%</td><td>Gusty</td></tr>
+          <tr><td>Friday Night Special</td><td class="num">14 in</td><td class="num">82%</td><td>A gale</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>What can happen</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Result</th><th>What went wrong</th><th>Next time</th></tr></thead>
+        <tbody>
+          <tr><td class="good">Clean launch</td><td>Nothing.</td><td>Do it again.</td></tr>
+          <tr><td>Bit of a snag</td><td>A few bare patches caught an edge.</td><td>Cover the edge of the circle too.</td></tr>
+          <tr><td class="bad">Calzone</td><td>A big bare area folded the pizza in half.</td><td>More semolina.</td></tr>
+          <tr><td class="bad">Welded to the peel</td><td>Over half the circle was bare, so only the toppings left.</td><td>Much more semolina.</td></tr>
+          <tr><td class="bad">Semolina beach</td><td>You went over the limit and it burned.</td><td>Keep an eye on the scale.</td></tr>
+          <tr><td class="bad">Door strike</td><td>The pizza hit the door frame.</td><td>Aim into the wind.</td></tr>
+          <tr><td class="bad">Left on the lip</td><td>The throw was too soft.</td><td>Pull back further.</td></tr>
+          <tr><td class="bad">Back wall barbecue</td><td>The throw was too hard.</td><td>Ease off.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>After each pizza, red patches on the peel show where it stuck.</p>
+  </section>
+
+  <section>
+    <h2>Scoring</h2>
+    <ul>
+      <li>Each pizza is worth up to <b>100 points</b>: just over half for the dusting (even coverage, under the limit) and the rest for the throw (how close to the middle of the green zone, and how central through the door).</li>
+      <li>Failed launches are capped. A welded pizza scores at most 15, and a calzone at most 45.</li>
+      <li>Your total out of 500 sets your rank:
+        <ul>
+          <li><b class="num">450+</b> Semolina Sommelier</li>
+          <li><b class="num">350+</b> Peel Whisperer</li>
+          <li><b class="num">220+</b> Calzone Apologist</li>
+          <li><b>Below that</b> Professional Stone Scraper</li>
+        </ul>
+      </li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Sharing</h2>
+    <ul>
+      <li>Type a name on the start screen, or send a link that has the name in it: <code>more-semolina.statiq.page/?chef=Dave</code>. The <b>Copy a link with this name</b> button builds the link for you.</li>
+      <li>At the end of the shift you get a <b>score card</b> picture. On a phone, <b>Send the score card</b> opens your share sheet. Otherwise, use <b>Save the score card</b>.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Tips</h2>
+    <ul>
+      <li>Sweep across the circle in rows, like mowing a lawn. Circling the middle leaves the edges bare.</li>
+      <li>Gold is enough. Piling more on a patch that's already gold only uses up your limit.</li>
+      <li>Throw soon after loading, before the dough starts to soak through.</li>
+      <li>In strong wind, aim off-centre by roughly the same amount each time, and adjust from where the last one landed.</li>
+    </ul>
+  </section>
+
+  <a class="play" href="./">Light the oven</a>
+</main>
+</html>

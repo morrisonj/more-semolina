@@ -16,6 +16,8 @@ There are five pizzas, each bigger and wetter than the last. At the end you get 
 
 Keyboard players can use the arrow keys and hold the space bar.
 
+**[Full instructions](https://more-semolina.statiq.page/how-to-play.html)** cover every result, what causes it, how scoring and ranks work, and tips. The same page is in this repo as [how-to-play.html](how-to-play.html).
+
 ## Send it to a friend by name
 
 Add `?chef=` and their name to the link, and the game greets them by name:
